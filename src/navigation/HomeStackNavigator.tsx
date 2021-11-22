@@ -25,7 +25,7 @@ export const MainStack = () => (
 );
 
 export const HomeStackNavigator = () => (
-  <RootStack.Navigator mode="modal">
+  <RootStack.Navigator>
     <RootStack.Screen
       name="Main"
       component={MainStack}

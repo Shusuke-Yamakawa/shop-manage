@@ -17,7 +17,7 @@ import { Product } from '../types/product';
 const firebaseApp = initializeApp(Constants.manifest.firebase);
 const db = getFirestore(firebaseApp);
 
-export const getProduct = async () => {
+export const getProduct = async (): Promise<Product[]> => {
   try {
     // const q = query(collection(db, 'product'), where('categoryId', '==', '1'));
     const q = query(collection(db, 'product'));

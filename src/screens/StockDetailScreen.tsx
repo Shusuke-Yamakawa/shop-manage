@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* types */
 import { RouteProp } from '@react-navigation/native';
@@ -14,9 +14,9 @@ export const StockDetail = ({ navigation, route }: Props) => {
   const { product } = route.params;
   console.log(product);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>{product.productName}</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 

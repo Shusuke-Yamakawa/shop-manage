@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* components */
 import { Stock } from '../components/Stock';
@@ -27,9 +27,9 @@ export const StockAdd = ({ navigation }: Props) => {
   const onSubmit = (data: FormData) => console.log(data);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Stock onSubmit={(data) => onSubmit(data)} />
-    </View>
+    </SafeAreaView>
   );
 };
 

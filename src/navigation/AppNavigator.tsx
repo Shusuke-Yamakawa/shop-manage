@@ -2,10 +2,10 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 /* navigators */
-import { HomeStackNavigator } from './HomeStackNavigator';
+import { MainTabNavigator } from './MainTabNavigator';
 
 export const AppNavigator = () => (
   <NavigationContainer>
-    <HomeStackNavigator />
+    <MainTabNavigator />
   </NavigationContainer>
 );

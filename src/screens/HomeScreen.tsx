@@ -26,13 +26,13 @@ export const HomeScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StockList products={product} navigation={navigation} />
       <FloatingActionButton
         iconName="plus"
         onPress={() => navigation.navigate('StockAdd')}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

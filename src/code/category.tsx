@@ -1,22 +1,18 @@
-export const getCategoryName = (categoryId: String): String => {
-  switch (categoryId) {
-    case '1':
-      return '野菜';
-    case '2':
-      return '乳製品';
-    case '3':
-      return '肉類';
-    case '4':
-      return '魚類';
-    case '5':
-      return '卵';
-    case '6':
-      return '調味料';
-    case '7':
-      return '味の素系';
-    case '8':
-      return '飲料';
-    default:
-      return 'その他';
-  }
+import { DropList } from '../types/dropList';
+
+export const category: DropList[] = [
+  { label: '野菜', value: 'vegetable' },
+  { label: '乳製品', value: 'milk_products' },
+  { label: '肉類', value: 'meats' },
+  { label: '魚類', value: 'fish' },
+  { label: '卵', value: 'egg' },
+  { label: '調味料', value: 'seasoning' },
+  { label: '味の素系', value: 'soup_stock' },
+  { label: '飲料', value: 'drink' },
+  { label: 'その他', value: 'other' },
+];
+
+export const getCategoryName = (code: string): string => {
+  const categoryGroup = category.find((item) => item.value === code);
+  return categoryGroup ? categoryGroup.label : 'その他';
 };
