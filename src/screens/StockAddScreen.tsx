@@ -1,22 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { ProductsContext } from '../contexts/productsContext';
 /* components */
 import { Stock } from '../components/Stock';
 import { IconButton } from '../components/IconButton';
 /* types */
 import { RootStackParamList } from '../types/navigation';
+import { ProductForm } from '../types/product';
+/* lib */
+import { addProduct } from '../lib/firebase';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'StockAdd'>;
 };
 
-type FormData = {
-  productName: string;
-  number: number;
-};
-
 export const StockAdd = ({ navigation }: Props) => {
+  const { products, setProducts } = useContext(ProductsContext);
+
   navigation.setOptions({
     title: '在庫の追加',
     headerLeft: () => (
@@ -24,7 +25,12 @@ export const StockAdd = ({ navigation }: Props) => {
     ),
   });
 
-  const onSubmit = (data: FormData) => console.log(data);
+  /** データをFirestoreに追加し、一覧画面に反映させた上で遷移する */
+  const onSubmit = async (data: ProductForm) => {
+    const resultProduct = await addProduct(data);
+    setProducts([resultProduct, ...products]);
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView style={styles.container}>

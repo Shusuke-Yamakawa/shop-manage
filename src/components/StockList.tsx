@@ -37,7 +37,7 @@ export const StockList = ({ products, navigation }: Props) => {
         </Text>
         <View>
           <Text style={styles.categoryText}>
-            {getCategoryName(item.categoryId)}
+            {getCategoryName(item.category)}
           </Text>
           <Text style={styles.limitText}>
             消費期限：

@@ -1,11 +1,18 @@
-import * as firebase from 'firebase';
+import { FieldValue } from 'firebase/firestore';
 
 export type Product = {
   productId: number;
   productName: string;
-  categoryId: string;
+  category: string;
   number: number;
   limit: string;
-  createdAt: firebase.firestore.Timestamp;
-  updatedAt: firebase.firestore.Timestamp;
+  createdAt: FieldValue;
+  updatedAt: FieldValue;
+};
+
+export type ProductForm = {
+  productName: string;
+  number: number;
+  category: string;
+  limit: Date;
 };

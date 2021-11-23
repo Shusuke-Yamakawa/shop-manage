@@ -1,33 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
+import React, { useEffect, useContext } from 'react';
+import { StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { ProductsContext } from '../contexts/productsContext';
 /* components */
 import { FloatingActionButton } from '../components/FloatingActionButton';
 import { StockList } from '../components/StockList';
 /* types */
 import { RootStackParamList } from '../types/navigation';
-import { Product } from '../types/product';
 /* lib */
-import { getProduct } from '../lib/firebase';
+import { getProducts } from '../lib/firebase';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 export const HomeScreen = ({ navigation }: Props) => {
-  const [product, setProduct] = useState<Product[]>([]);
+  const { products, setProducts } = useContext(ProductsContext);
 
   useEffect(() => {
     getFirebaseItems();
   }, []);
 
   const getFirebaseItems = async () => {
-    setProduct(await getProduct());
+    setProducts(await getProducts());
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StockList products={product} navigation={navigation} />
+      <ScrollView>
+        <StockList products={products} navigation={navigation} />
+      </ScrollView>
       <FloatingActionButton
         iconName="plus"
         onPress={() => navigation.navigate('StockAdd')}

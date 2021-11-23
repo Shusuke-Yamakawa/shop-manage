@@ -1,4 +1,3 @@
-import { StockDetail } from '../screens/StockDetailScreen';
 import { Product } from './product';
 
 export type RootStackParamList = {

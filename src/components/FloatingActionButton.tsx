@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#900',
     position: 'absolute',
     right: 16,
-    bottom: 16,
+    bottom: 48,
     alignItems: 'center',
     justifyContent: 'center',
   },

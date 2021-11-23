@@ -13,24 +13,18 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FontAwesome } from '@expo/vector-icons';
 import * as yup from 'yup';
 /* component */
 import { MEButton } from './Button';
 /* code */
 import { category } from '../code/category';
 /* types */
-import { DropList } from '../types/dropList';
+import { ProductForm } from '../types/product';
+/* util */
+import { convDateToString } from '../util/convDateToString';
 
 type Props = {
-  onSubmit: (data: FormData) => void;
-};
-
-type FormData = {
-  productName: string;
-  number: number;
-  category: DropList[];
-  expirationDate: Date;
+  onSubmit: (data: ProductForm) => void;
 };
 
 const schema = yup.object().shape({
@@ -40,7 +34,7 @@ const schema = yup.object().shape({
     .required('数量を入力してください')
     .typeError('数字を入力してください'),
   category: yup.string().required('カテゴリーを入力してください'),
-  expirationDate: yup.date().required('消費期限を入力してください'),
+  limit: yup.date().required('消費期限を入力してください'),
 });
 
 export const Stock = ({ onSubmit }: Props) => {
@@ -48,7 +42,7 @@ export const Stock = ({ onSubmit }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<ProductForm>({
     resolver: yupResolver(schema),
   });
 
@@ -58,10 +52,7 @@ export const Stock = ({ onSubmit }: Props) => {
   const onChangeDate = (event: Event, selectedDate: Date) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
-    const year = currentDate.getFullYear();
-    const month = `0${currentDate.getMonth() + 1}`.slice(-2);
-    const day = `0${currentDate.getDate()}`.slice(-2);
-    setDate(`${year}/${month}/${day}`);
+    setDate(convDateToString(currentDate));
   };
 
   const showDatePicker = () => {
@@ -130,7 +121,7 @@ export const Stock = ({ onSubmit }: Props) => {
           <Text style={styles.text}>消費期限</Text>
           <TouchableOpacity style={styles.textInput} onPress={showDatePicker}>
             <TextInput
-              style={styles.expirationInput}
+              style={styles.limitInput}
               value={date}
               editable={false}
             />
@@ -138,7 +129,7 @@ export const Stock = ({ onSubmit }: Props) => {
 
           {show && (
             <Controller
-              name="expirationDate"
+              name="limit"
               control={control}
               render={({ field: { onChange } }) => (
                 <DateTimePicker
@@ -153,8 +144,8 @@ export const Stock = ({ onSubmit }: Props) => {
             />
           )}
         </View>
-        {errors.expirationDate && (
-          <Text style={styles.errorText}>{errors.expirationDate.message}</Text>
+        {errors.limit && (
+          <Text style={styles.errorText}>{errors.limit.message}</Text>
         )}
         <MEButton
           text="登録"
@@ -181,7 +172,7 @@ const styles = StyleSheet.create({
     width: '70%',
     fontSize: 16,
   },
-  expirationInput: {
+  limitInput: {
     fontSize: 16,
     color: '#000',
   },
