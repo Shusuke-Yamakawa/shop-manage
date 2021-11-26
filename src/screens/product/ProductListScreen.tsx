@@ -1,20 +1,20 @@
 import React, { useEffect, useContext } from 'react';
 import { StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { ProductsContext } from '../contexts/productsContext';
+import { ProductsContext } from '../../contexts/productsContext';
 /* components */
-import { FloatingActionButton } from '../components/FloatingActionButton';
-import { StockList } from '../components/StockList';
+import { FloatingActionButton } from '../../components/FloatingActionButton';
+import { ProductList } from '../../components/ProductList';
 /* types */
-import { RootStackParamList } from '../types/navigation';
+import { RootStackParamList } from '../../types/navigation';
 /* lib */
-import { getProducts } from '../lib/firebase';
+import { getProducts } from '../../lib/firebase';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
+  navigation: StackNavigationProp<RootStackParamList, 'ProductList'>;
 };
 
-export const HomeScreen = ({ navigation }: Props) => {
+export const ProductListScreen = ({ navigation }: Props) => {
   const { products, setProducts } = useContext(ProductsContext);
 
   useEffect(() => {
@@ -28,11 +28,11 @@ export const HomeScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <StockList products={products} navigation={navigation} />
+        <ProductList products={products} navigation={navigation} />
       </ScrollView>
       <FloatingActionButton
         iconName="plus"
-        onPress={() => navigation.navigate('StockAdd')}
+        onPress={() => navigation.navigate('ProductAdd')}
       />
     </SafeAreaView>
   );

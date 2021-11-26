@@ -37,7 +37,7 @@ const schema = yup.object().shape({
   limit: yup.date().required('消費期限を入力してください'),
 });
 
-export const Stock = ({ onSubmit }: Props) => {
+export const Product = ({ onSubmit }: Props) => {
   const {
     control,
     handleSubmit,

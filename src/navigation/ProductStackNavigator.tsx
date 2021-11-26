@@ -2,9 +2,9 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 /* screens */
-import { HomeScreen } from '../screens/HomeScreen';
-import { StockAdd } from '../screens/StockAddScreen';
-import { StockDetail } from '../screens/StockDetailScreen';
+import { ProductListScreen } from '../screens/product/ProductListScreen';
+import { ProductAdd } from '../screens/product/ProductAddScreen';
+import { ProductDetail } from '../screens/product/ProductDetailScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -16,21 +16,21 @@ export const MainStack = () => (
     }}
   >
     <Stack.Screen
-      name="Home"
-      component={HomeScreen}
+      name="ProductList"
+      component={ProductListScreen}
       options={{ headerShown: false }}
     />
-    <Stack.Screen name="StockDetail" component={StockDetail} />
+    <Stack.Screen name="ProductDetail" component={ProductDetail} />
   </Stack.Navigator>
 );
 
-export const HomeStackNavigator = () => (
+export const ProductStackNavigator = () => (
   <RootStack.Navigator>
     <RootStack.Screen
       name="Main"
       component={MainStack}
       options={{ headerShown: false }}
     />
-    <RootStack.Screen name="StockAdd" component={StockAdd} />
+    <RootStack.Screen name="ProductAdd" component={ProductAdd} />
   </RootStack.Navigator>
 );

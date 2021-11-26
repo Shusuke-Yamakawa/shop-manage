@@ -1,25 +1,25 @@
 import React, { useContext } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { ProductsContext } from '../contexts/productsContext';
+import { ProductsContext } from '../../contexts/productsContext';
 /* components */
-import { Stock } from '../components/Stock';
-import { IconButton } from '../components/IconButton';
+import { Product } from '../../components/Product';
+import { IconButton } from '../../components/IconButton';
 /* types */
-import { RootStackParamList } from '../types/navigation';
-import { ProductForm } from '../types/product';
+import { RootStackParamList } from '../../types/navigation';
+import { ProductForm } from '../../types/product';
 /* lib */
-import { addProduct } from '../lib/firebase';
+import { addProduct } from '../../lib/firebase';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'StockAdd'>;
+  navigation: StackNavigationProp<RootStackParamList, 'ProductAdd'>;
 };
 
-export const StockAdd = ({ navigation }: Props) => {
+export const ProductAdd = ({ navigation }: Props) => {
   const { products, setProducts } = useContext(ProductsContext);
 
   navigation.setOptions({
-    title: '在庫の追加',
+    title: '商品追加',
     headerLeft: () => (
       <IconButton name="x" onPress={() => navigation.goBack()} />
     ),
@@ -34,7 +34,7 @@ export const StockAdd = ({ navigation }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stock onSubmit={(data) => onSubmit(data)} />
+      <Product onSubmit={(data) => onSubmit(data)} />
     </SafeAreaView>
   );
 };

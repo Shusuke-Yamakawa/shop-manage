@@ -18,19 +18,19 @@ import { getCategoryName } from '../code/category';
 
 type Props = {
   products: Product[];
-  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
+  navigation: StackNavigationProp<RootStackParamList, 'ProductList'>;
 };
 
-export const StockList = ({ products, navigation }: Props) => {
-  const onPressStock = (product: Product) => {
-    navigation.navigate('StockDetail', { product });
+export const ProductList = ({ products, navigation }: Props) => {
+  const onPressProduct = (product: Product) => {
+    navigation.navigate('ProductDetail', { product });
   };
 
   const renderItem = ({ item }: { item: Product }) => (
     <SafeAreaView>
       <TouchableOpacity
         style={styles.listContainer}
-        onPress={() => onPressStock(item)}
+        onPress={() => onPressProduct(item)}
       >
         <Text style={styles.productText}>
           {item.productName}（{item.number}）

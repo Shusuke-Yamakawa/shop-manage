@@ -26,8 +26,8 @@ const db = getFirestore(firebaseApp);
 /** Productコレクションから全データを取得する */
 export const getProducts = async (): Promise<Product[]> => {
   try {
-    // const q = query(collection(db, 'product'), where('categoryId', '==', '1'));
-    const q = query(collection(db, 'product'));
+    // const q = query(collection(db, 'product'), where('category', '==', '1'));
+    const q = query(collection(db, 'product'), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     const products = querySnapshot.docs.map(
       (doc) => ({ ...doc.data() } as Product),

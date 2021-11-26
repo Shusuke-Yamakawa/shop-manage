@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import { HomeStackNavigator } from './HomeStackNavigator';
+import { ProductStackNavigator } from './ProductStackNavigator';
 /* screens */
-import { HomeScreen } from '../screens/HomeScreen';
+import { ProductListScreen } from '../screens/product/ProductListScreen';
 import { ShoppingScreen } from '../screens/ShoppingScreen';
 
 const Tab = createBottomTabNavigator();
@@ -16,9 +16,9 @@ export const MainTabNavigator = () => (
   >
     <Tab.Screen
       name="食材管理"
-      component={HomeStackNavigator}
+      component={ProductStackNavigator}
       options={{
-        tabBarLabel: 'Home',
+        tabBarLabel: 'product',
         tabBarIcon: ({ color, size }) => (
           <Feather name="home" color={color} size={size} />
         ),
