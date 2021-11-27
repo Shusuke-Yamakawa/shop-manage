@@ -19,14 +19,19 @@ import { MEButton } from './Button';
 /* code */
 import { category } from '../code/category';
 /* types */
-import { ProductForm } from '../types/product';
+import { ProductType, ProductForm } from '../types/product';
 /* util */
 import { convDateToString } from '../util/convDateToString';
 
 type Props = {
+  buttonText: string;
+  selectProduct?: ProductType;
   onSubmit: (data: ProductForm) => void;
 };
 
+/**
+ * フォームバリデータの設定
+ */
 const schema = yup.object().shape({
   productName: yup.string().required('商品名を入力してください'),
   number: yup
@@ -37,27 +42,54 @@ const schema = yup.object().shape({
   limit: yup.date().required('消費期限を入力してください'),
 });
 
-export const Product = ({ onSubmit }: Props) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProductForm>({
-    resolver: yupResolver(schema),
-  });
+export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
+  /**
+   * 画面項目のstate
+   */
+  const [prodName, setProdName] = useState<string>(
+    selectProduct ? selectProduct.productName : '',
+  );
+  const [prodNumber, setProdNumber] = useState<string>(
+    selectProduct ? String(selectProduct.number) : '',
+  );
+  const [prodCategory, setProdCategory] = useState<string>(
+    selectProduct ? selectProduct.category : '',
+  );
+  const [prodLimit, setProdLimit] = useState<string>(
+    selectProduct ? selectProduct.limit : '',
+  );
 
-  const [date, setDate] = useState<string>('');
+  /**
+   * 消費期限関連の設定
+   */
   const [show, setShow] = useState(false);
 
   const onChangeDate = (event: Event, selectedDate: Date) => {
-    const currentDate = selectedDate || date;
+    const currentDate = selectedDate || prodLimit;
     setShow(Platform.OS === 'ios');
-    setDate(convDateToString(currentDate));
+    setProdLimit(convDateToString(currentDate));
   };
 
   const showDatePicker = () => {
     setShow(true);
   };
+
+  /**
+   * react-hook-formの初期設定
+   */
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProductForm>({
+    defaultValues: {
+      productName: prodName,
+      number: prodNumber ? Number(prodNumber) : undefined,
+      category: prodCategory,
+      limit: prodLimit ? new Date(prodLimit) : undefined,
+    },
+    resolver: yupResolver(schema),
+  });
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -70,8 +102,11 @@ export const Product = ({ onSubmit }: Props) => {
             render={({ field: { onChange, onBlur } }) => (
               <TextInput
                 onBlur={onBlur}
-                onChangeText={onChange}
-                // value={value}
+                onChangeText={(input) => {
+                  setProdName(input);
+                  onChange(input);
+                }}
+                value={prodName}
                 style={styles.textInput}
               />
             )}
@@ -88,7 +123,11 @@ export const Product = ({ onSubmit }: Props) => {
             render={({ field: { onChange, onBlur } }) => (
               <TextInput
                 onBlur={onBlur}
-                onChangeText={onChange}
+                onChangeText={(input) => {
+                  setProdNumber(input);
+                  onChange(input);
+                }}
+                value={prodNumber}
                 style={styles.textInput}
                 keyboardType="number-pad"
               />
@@ -107,7 +146,11 @@ export const Product = ({ onSubmit }: Props) => {
             render={({ field: { onChange } }) => (
               <RNPickerSelect
                 placeholder={{ label: '選択してください', value: '' }}
-                onValueChange={onChange}
+                onValueChange={(input) => {
+                  setProdCategory(input);
+                  onChange(input);
+                }}
+                value={prodCategory}
                 style={pickerSelectStyles}
                 items={category}
               />
@@ -122,7 +165,7 @@ export const Product = ({ onSubmit }: Props) => {
           <TouchableOpacity style={styles.textInput} onPress={showDatePicker}>
             <TextInput
               style={styles.limitInput}
-              value={date}
+              value={prodLimit}
               editable={false}
             />
           </TouchableOpacity>
@@ -148,7 +191,7 @@ export const Product = ({ onSubmit }: Props) => {
           <Text style={styles.errorText}>{errors.limit.message}</Text>
         )}
         <MEButton
-          text="登録"
+          text={buttonText}
           onPress={handleSubmit((data) => onSubmit(data))}
         />
       </View>

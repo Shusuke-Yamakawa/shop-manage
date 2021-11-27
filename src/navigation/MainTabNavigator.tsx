@@ -3,8 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { ProductStackNavigator } from './ProductStackNavigator';
 /* screens */
-import { ProductListScreen } from '../screens/product/ProductListScreen';
-import { ShoppingScreen } from '../screens/ShoppingScreen';
+import { ShoppingScreen } from '../screens/shopping/ShoppingScreen';
 
 const Tab = createBottomTabNavigator();
 

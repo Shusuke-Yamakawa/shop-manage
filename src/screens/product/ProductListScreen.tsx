@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProductsContext } from '../../contexts/productsContext';
 /* components */
@@ -27,9 +27,7 @@ export const ProductListScreen = ({ navigation }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <ProductList products={products} navigation={navigation} />
-      </ScrollView>
+      <ProductList products={products} navigation={navigation} />
       <FloatingActionButton
         iconName="plus"
         onPress={() => navigation.navigate('ProductAdd')}

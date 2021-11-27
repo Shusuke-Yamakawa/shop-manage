@@ -1,6 +1,7 @@
 import { FieldValue } from 'firebase/firestore';
 
-export type Product = {
+export type ProductType = {
+  id?: string;
   productId: number;
   productName: string;
   category: string;

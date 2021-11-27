@@ -9,14 +9,15 @@ import {
   getDocs,
   doc,
   setDoc,
-  addDoc,
+  updateDoc,
+  deleteDoc,
   serverTimestamp,
   runTransaction,
 } from 'firebase/firestore';
 import 'firebase/auth';
 import Constants from 'expo-constants';
 /* types */
-import { Product, ProductForm } from '../types/product';
+import { ProductType, ProductForm } from '../types/product';
 /* util */
 import { convDateToString } from '../util/convDateToString';
 
@@ -30,7 +31,7 @@ export const getProducts = async (): Promise<Product[]> => {
     const q = query(collection(db, 'product'), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     const products = querySnapshot.docs.map(
-      (doc) => ({ ...doc.data() } as Product),
+      (doc) => ({ ...doc.data(), id: doc.id } as ProductType),
     );
     return products;
   } catch (err) {
@@ -39,12 +40,15 @@ export const getProducts = async (): Promise<Product[]> => {
   }
 };
 
+/** Productコレクションにデータを追加する */
 export const addProduct = async (data: ProductForm) => {
   const productRef = collection(db, 'product');
   const newProductRef = doc(productRef);
+  console.log(newProductRef);
+  console.log(newProductRef.id);
 
   try {
-    const product: Product = {
+    const product: ProductType = {
       productId: 0,
       productName: data.productName,
       category: data.category,
@@ -66,8 +70,45 @@ export const addProduct = async (data: ProductForm) => {
         transaction.set(newProductRef, product);
       });
     });
+    product.id = newProductRef.id;
     return product;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
+    return null;
   }
+};
+
+/** Productコレクションのデータを更新する */
+export const updateProduct = async (
+  data: ProductForm,
+  product: ProductType,
+) => {
+  try {
+    const productData: ProductType = {
+      productName: data.productName,
+      category: data.category,
+      number: data.number,
+      limit: convDateToString(data.limit),
+      updatedAt: serverTimestamp(),
+    };
+
+    const productDocRef = doc(db, 'product', product.id);
+
+    await updateDoc(productDocRef, productData);
+
+    // 一覧画面に反映するため、既存の商品情報をセットして返却する
+    productData.productId = product.productId;
+    productData.createdAt = product.createdAt;
+    productData.id = product.id;
+
+    return productData;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+/** Productコレクションのデータを削除する */
+export const deleteProduct = async (docId: string) => {
+  await deleteDoc(doc(db, 'product', docId));
 };

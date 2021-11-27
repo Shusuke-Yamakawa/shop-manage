@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 /* components */
 import { RouteProp } from '@react-navigation/native';
 /* types */
-import { RootStackParamList } from '../types/navigation';
+import { RootStackParamList } from '../../types/navigation';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Shopping'>;

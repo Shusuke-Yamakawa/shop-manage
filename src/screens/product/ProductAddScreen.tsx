@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProductsContext } from '../../contexts/productsContext';
 /* components */
 import { Product } from '../../components/Product';
 import { IconButton } from '../../components/IconButton';
+import { cancelAndOkAlert } from '../../components/CommonAlert';
 /* types */
 import { RootStackParamList } from '../../types/navigation';
 import { ProductForm } from '../../types/product';
@@ -25,16 +26,25 @@ export const ProductAdd = ({ navigation }: Props) => {
     ),
   });
 
-  /** データをFirestoreに追加し、一覧画面に反映させた上で遷移する */
-  const onSubmit = async (data: ProductForm) => {
+  const register = async (data: ProductForm) => {
     const resultProduct = await addProduct(data);
     setProducts([resultProduct, ...products]);
     navigation.goBack();
   };
 
+  /** データをFirestoreに追加し、一覧画面に反映させた上で遷移する */
+  const onSubmit = async (data: ProductForm) => {
+    cancelAndOkAlert(
+      '商品を登録します',
+      'よろしいですか？',
+      () => register(data),
+      () => {},
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <Product onSubmit={(data) => onSubmit(data)} />
+      <Product buttonText="登録" onSubmit={(data) => onSubmit(data)} />
     </SafeAreaView>
   );
 };

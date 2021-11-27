@@ -10,23 +10,23 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 
 /* types */
-import { Product } from '../types/product';
+import { ProductType } from '../types/product';
 import { RootStackParamList } from '../types/navigation';
 
 /* code */
 import { getCategoryName } from '../code/category';
 
 type Props = {
-  products: Product[];
+  products: ProductType[];
   navigation: StackNavigationProp<RootStackParamList, 'ProductList'>;
 };
 
 export const ProductList = ({ products, navigation }: Props) => {
-  const onPressProduct = (product: Product) => {
+  const onPressProduct = (product: ProductType) => {
     navigation.navigate('ProductDetail', { product });
   };
 
-  const renderItem = ({ item }: { item: Product }) => (
+  const renderItem = ({ item }: { item: ProductType }) => (
     <SafeAreaView>
       <TouchableOpacity
         style={styles.listContainer}
