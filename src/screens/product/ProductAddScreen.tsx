@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProductsContext } from '../../contexts/productsContext';
 /* components */

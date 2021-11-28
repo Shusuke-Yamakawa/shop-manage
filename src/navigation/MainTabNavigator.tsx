@@ -2,8 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { ProductStackNavigator } from './ProductStackNavigator';
-/* screens */
-import { ShoppingScreen } from '../screens/shopping/ShoppingScreen';
+import { ShoppingStackNavigator } from './ShoppingStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,8 +23,8 @@ export const MainTabNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="Shopping"
-      component={ShoppingScreen}
+      name="買い物リスト"
+      component={ShoppingStackNavigator}
       options={{
         tabBarLabel: 'Shopping',
         tabBarIcon: ({ color, size }) => (
