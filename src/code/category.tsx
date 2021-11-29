@@ -15,6 +15,6 @@ export const category: DropList[] = [
 ];
 
 export const getCategoryName = (code: string): string => {
-  const categoryGroup = category.find((item) => item.value === code);
-  return categoryGroup ? categoryGroup.label : 'その他';
+  const categoryUnit = category.find((item) => item.value === code);
+  return categoryUnit ? categoryUnit.label : 'その他';
 };
