@@ -20,6 +20,8 @@ export const MainTabNavigator = () => (
         tabBarIcon: ({ color, size }) => (
           <Feather name="home" color={color} size={size} />
         ),
+        headerTitleAlign: 'center',
+        headerTitleStyle: { fontSize: 24 },
       }}
     />
     <Tab.Screen
@@ -30,6 +32,7 @@ export const MainTabNavigator = () => (
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="shopping" color={color} size={size} />
         ),
+        headerShown: false,
       }}
     />
   </Tab.Navigator>

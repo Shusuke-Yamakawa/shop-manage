@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { ProductsContext } from './src/contexts/productsContext';
-import { Product } from './src/types/product';
+import { ProductType } from './src/types/product';
 
 export default function App() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
 
   return (
     <ProductsContext.Provider value={{ products, setProducts }}>
