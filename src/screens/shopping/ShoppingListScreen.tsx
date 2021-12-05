@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* components */
 import { RouteProp } from '@react-navigation/native';
+import { ShoppingList } from '../../components/ShoppingList';
 import { FloatingActionButton } from '../../components/FloatingActionButton';
 /* context */
 import { ShoppingContext } from '../../contexts/shoppingContext';
@@ -15,13 +16,13 @@ type Props = {
 
 export const ShoppingListScreen = ({ navigation }: Props) => {
   const { shoppingList, setShopping } = useContext(ShoppingContext);
-  console.log(shoppingList);
+  // console.log(shoppingList);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>買い物リスト</Text>
       </View>
-      <Text>{shoppingList}</Text>
+      <ShoppingList shoppingList={shoppingList} />
 
       <FloatingActionButton
         iconName="plus"

@@ -24,8 +24,8 @@ export const ProductDetail = ({ navigation, route }: Props) => {
 
   const updateData = async (data: ProductForm) => {
     const resultProduct = await updateProduct(data, product);
-    const newProducts = products.filter((prod) => prod.id !== product.id);
-    setProducts([resultProduct, ...newProducts]);
+    const existsProducts = products.filter((prod) => prod.id !== product.id);
+    setProducts([resultProduct, ...existsProducts]);
     navigation.goBack();
   };
 

@@ -9,12 +9,18 @@ import { Feather } from '@expo/vector-icons';
 type Props = {
   onPress: (event: GestureResponderEvent) => void;
   name: React.ComponentProps<typeof Feather>['name'];
+  size?: number;
   color?: string;
 };
 
-export const IconButton = ({ onPress, name, color = '#000' }: Props) => (
+export const IconButton = ({
+  onPress,
+  name,
+  size = 32,
+  color = '#000',
+}: Props) => (
   <TouchableOpacity onPress={onPress} style={styles.container}>
-    <Feather name={name} color={color} size={32} />
+    <Feather name={name} color={color} size={size} />
   </TouchableOpacity>
 );
 

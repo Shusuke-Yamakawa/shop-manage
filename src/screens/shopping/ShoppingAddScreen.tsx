@@ -41,7 +41,7 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
     ),
   });
   const { products } = useContext(ProductsContext);
-  const sectionData = category.map((c) => ({
+  const productData = category.map((c) => ({
     title: c.label,
     data: products
       .filter((p) => p.category === c.value)
@@ -50,23 +50,23 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
 
   const { shoppingList, setShopping } = useContext(ShoppingContext);
   /** 各商品のリスト */
-  const Item = ({ data }: { data: string }) => {
-    const isActive = shoppingList.some((s) => s === data);
+  const Item = ({ product }: { product: string }) => {
+    const isActive = shoppingList.some((s) => s === product);
 
     return (
       <TouchableOpacity
         /** 選択した商品を買い物リストに追加する */
         onPress={() => {
-          if (shoppingList.some((s) => s === data)) {
+          if (shoppingList.some((s) => s === product)) {
             // 既に選択されている場合は除去する
-            setShopping(shoppingList.filter((s) => s !== data));
+            setShopping(shoppingList.filter((s) => s !== product));
           } else {
-            setShopping([...shoppingList, data]);
+            setShopping([...shoppingList, product]);
           }
         }}
       >
         <View style={[styles.item, isActive ? styles.activeItem : null]}>
-          <Text style={styles.data}>{data}</Text>
+          <Text style={styles.product}>{product}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -75,9 +75,9 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <SectionList
-        sections={sectionData}
+        sections={productData}
         keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => <Item data={item} />}
+        renderItem={({ item }) => <Item product={item} />}
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.header}>{title}</Text>
         )}
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0,  0.15)',
     backgroundColor: '#fff',
   },
-  data: {
+  product: {
     fontSize: 16,
   },
 });

@@ -44,9 +44,6 @@ export const getProducts = async (): Promise<Product[]> => {
 export const addProduct = async (data: ProductForm) => {
   const productRef = collection(db, 'product');
   const newProductRef = doc(productRef);
-  console.log(newProductRef);
-  console.log(newProductRef.id);
-
   try {
     const product: ProductType = {
       productId: 0,
