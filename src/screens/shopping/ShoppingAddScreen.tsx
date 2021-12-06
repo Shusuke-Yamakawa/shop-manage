@@ -51,10 +51,11 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
   const { shoppingList, setShopping } = useContext(ShoppingContext);
   /** 各商品のリスト */
   const Item = ({ product }: { product: string }) => {
-    const isActive = shoppingList.some((s) => s === product);
+    const isSelected = shoppingList.some((s) => s === product);
 
     return (
       <TouchableOpacity
+        style={[styles.item, isSelected ? styles.selectedItem : null]}
         /** 選択した商品を買い物リストに追加する */
         onPress={() => {
           if (shoppingList.some((s) => s === product)) {
@@ -65,9 +66,7 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
           }
         }}
       >
-        <View style={[styles.item, isActive ? styles.activeItem : null]}>
-          <Text style={styles.product}>{product}</Text>
-        </View>
+        <Text style={styles.product}>{product}</Text>
       </TouchableOpacity>
     );
   };
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 2,
   },
-  activeItem: {
+  selectedItem: {
     backgroundColor: '#008080',
   },
   header: {

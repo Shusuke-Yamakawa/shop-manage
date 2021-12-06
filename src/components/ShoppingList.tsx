@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -39,48 +39,80 @@ const numberList = [
 ];
 
 export const ShoppingList = ({ shoppingList }: Props) => {
-  // const [number, setNumber] = useState<string>('1');
+  // TODO 今の書き方だと新規追加時にnumberなどが戻ってしまう
+  useEffect(() => {
+    setShopTarget(
+      shoppingList.map((product) => ({
+        name: product,
+        number: '1',
+        isSelected: false,
+      })),
+    );
+  }, [shoppingList]);
 
-  const [shopTarget, setShopTarget] = useState(
-    shoppingList.map((product) => ({
-      name: product,
-      number: '1',
-    })),
-  );
+  const [shopTarget, setShopTarget] = useState();
 
-  const onPressProduct = (shoppingTarget: string) => {
+  /**
+   * 選択行とそれ以外の行を返却する
+   * @param item 選択行
+   */
+  const existsAndSelectedItem = (item: string) => {
+    const existsShopList = shopTarget.filter(
+      (product) => product.name !== item,
+    );
+    const selectedProduct =
+      shopTarget.find((product) => product.name === item) ??
+      shopTarget[shopTarget.length - 1];
+    return { existsShopList, selectedProduct };
+  };
+
+  /**
+   * リスト選択時の処理
+   * @param item 選択行
+   */
+  const onPressProduct = (item: string) => {
+    const { existsShopList, selectedProduct } = existsAndSelectedItem(item);
+    selectedProduct.isSelected = !selectedProduct.isSelected;
+    setShopTarget([...existsShopList, selectedProduct]);
     console.log(shopTarget);
   };
 
-  const renderItem = ({ item }: { item: string }) => (
-    <SafeAreaView>
-      <TouchableOpacity
-        style={styles.listContainer}
-        onPress={() => onPressProduct(item)}
-      >
-        <Text style={styles.productText}>{item}</Text>
-        <View style={styles.numberContainer}>
-          <Text style={styles.numberText}>数：</Text>
-          <RNPickerSelect
-            placeholder={{ label: '1', value: '1' }}
-            onValueChange={(input) => {
-              const existsShopList = shopTarget.filter(
-                (product) => product.name !== item,
-              );
-              const newShopping = {
-                name: item,
-                number: input,
-              };
-              setShopTarget([...existsShopList, newShopping]);
-            }}
-            itemKey="1"
-            style={pickerSelectStyles}
-            items={numberList}
-          />
-        </View>
-      </TouchableOpacity>
-    </SafeAreaView>
-  );
+  const renderItem = ({ item }: { item: string }) => {
+    const shopTargetData = shopTarget.find((data) => data.name === item);
+    const isSelected = shopTargetData ? shopTargetData.isSelected : false;
+    return (
+      <SafeAreaView>
+        <TouchableOpacity
+          style={[
+            styles.listContainer,
+            isSelected ? styles.selectedItem : null,
+          ]}
+          onPress={() => onPressProduct(item)}
+        >
+          <Text
+            style={[styles.productText, isSelected ? styles.checkedText : null]}
+          >
+            {item}
+          </Text>
+          <View style={styles.numberContainer}>
+            <Text style={styles.numberText}>数：</Text>
+            <RNPickerSelect
+              placeholder={{ label: '1', value: '1' }}
+              onValueChange={(input) => {
+                const { existsShopList, selectedProduct } =
+                  existsAndSelectedItem(item);
+                selectedProduct.number = input;
+                setShopTarget([...existsShopList, selectedProduct]);
+              }}
+              itemKey="1"
+              style={pickerSelectStyles}
+              items={numberList}
+            />
+          </View>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  };
 
   return (
     <FlatList
@@ -105,8 +137,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: 'rgba(0, 0, 0,  0.15)',
   },
+  selectedItem: {
+    backgroundColor: '#808080',
+  },
   productText: {
     fontSize: 16,
+  },
+  checkedText: {
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
   },
   numberContainer: {
     flexDirection: 'row',
@@ -115,7 +154,7 @@ const styles = StyleSheet.create({
   numberText: {
     top: 16,
     fontSize: 16,
-    color: '#848484',
+    color: '#000',
   },
 });
 
