@@ -36,7 +36,7 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
           navigation.goBack();
         }}
       >
-        <Text style={styles.label}>完了</Text>
+        <Text style={styles.finishLabel}>完了</Text>
       </TouchableOpacity>
     ),
   });
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 16,
   },
-  label: {
+  finishLabel: {
     fontSize: 20,
     color: '#ffaf26',
     padding: 10,

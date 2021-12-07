@@ -8,7 +8,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { Feather } from '@expo/vector-icons';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -17,9 +16,10 @@ import { getCategoryName } from '../code/category';
 
 /* component */
 import { IconButton } from '../components/IconButton';
+import { FloatingActionButton } from '../components/FloatingActionButton';
 
 /* types */
-import { ProductType } from '../types/product';
+import { ShopTarget } from '../types/shopTarget';
 import { RootStackParamList } from '../types/navigation';
 
 type Props = {
@@ -39,18 +39,28 @@ const numberList = [
 ];
 
 export const ShoppingList = ({ shoppingList }: Props) => {
-  // TODO 今の書き方だと新規追加時にnumberなどが戻ってしまう
+  // 買い物リストの選択が変更される度に、shopTargetを再生成する
   useEffect(() => {
-    setShopTarget(
-      shoppingList.map((product) => ({
-        name: product,
-        number: '1',
-        isSelected: false,
-      })),
+    const shopTargetNames = shopTarget.map((target) => target.name);
+    // 既存のオブジェクトは変更を加えない
+    const remainTargetObj = shopTarget.filter((target) =>
+      shoppingList.includes(target.name),
     );
+    // 追加／削除が行われたshoppingListから新たなオブジェクトを生成
+    const newTargetList = shoppingList.filter(
+      (target) => !shopTargetNames.includes(target),
+    );
+    const newShopTargetObj = newTargetList.map((product) => ({
+      name: product,
+      number: '1',
+      isSelected: false,
+    }));
+    // 旧と新を合算させる
+    setShopTarget([...remainTargetObj, ...newShopTargetObj]);
   }, [shoppingList]);
 
-  const [shopTarget, setShopTarget] = useState();
+  // 更新用にオブジェクト化した買い物リスト
+  const [shopTarget, setShopTarget] = useState<ShopTarget[]>([]);
 
   /**
    * 選択行とそれ以外の行を返却する
@@ -114,6 +124,26 @@ export const ShoppingList = ({ shoppingList }: Props) => {
     );
   };
 
+  // 一件でも選択状態だった場合、購入ボタンを表示させる
+  const isBuyReady = shopTarget.some((target) => target.isSelected);
+
+  if (isBuyReady) {
+    return (
+      <View>
+        <FlatList
+          data={shoppingList}
+          renderItem={renderItem}
+          keyExtractor={(item) => String(item)}
+        />
+        <TouchableOpacity
+          style={styles.buyButton}
+          onPress={() => console.log(shopTarget)}
+        >
+          <Text style={styles.buyText}>購入</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
   return (
     <FlatList
       data={shoppingList}
@@ -155,6 +185,21 @@ const styles = StyleSheet.create({
     top: 16,
     fontSize: 16,
     color: '#000',
+  },
+  buyButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 56 / 2,
+    backgroundColor: '#008000',
+    position: 'absolute',
+    top: 430,
+    left: 340,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buyText: {
+    fontSize: 18,
+    color: '#fff',
   },
 });
 

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* components */
 import { RouteProp } from '@react-navigation/native';
+import { IconButton } from '../../components/IconButton';
 import { ShoppingList } from '../../components/ShoppingList';
 import { FloatingActionButton } from '../../components/FloatingActionButton';
 /* context */
@@ -21,13 +22,13 @@ export const ShoppingListScreen = ({ navigation }: Props) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>買い物リスト</Text>
+        <IconButton
+          name="plus"
+          color="#ffaf26"
+          onPress={() => navigation.navigate('ShoppingAdd')}
+        />
       </View>
       <ShoppingList shoppingList={shoppingList} />
-
-      <FloatingActionButton
-        iconName="plus"
-        onPress={() => navigation.navigate('ShoppingAdd')}
-      />
     </SafeAreaView>
   );
 };
@@ -37,14 +38,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     height: 100,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
     borderBottomWidth: 5,
     borderColor: 'rgba(0, 0, 0,  0.15)',
   },
   headerTitle: {
-    marginBottom: 30,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    left: 130,
+    marginBottom: 15,
     fontSize: 24,
     lineHeight: 32,
     color: '#000',
