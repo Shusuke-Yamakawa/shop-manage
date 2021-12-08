@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* components */
 import { RouteProp } from '@react-navigation/native';
-import { IconButton } from '../../components/IconButton';
+import { IconButton } from '../../components/common/IconButton';
 import { ShoppingList } from '../../components/ShoppingList';
-import { FloatingActionButton } from '../../components/FloatingActionButton';
+import { FloatingActionButton } from '../../components/common/FloatingActionButton';
 /* context */
 import { ShoppingContext } from '../../contexts/shoppingContext';
 /* types */
@@ -15,23 +15,20 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ShoppingList'>;
 };
 
-export const ShoppingListScreen = ({ navigation }: Props) => {
-  const { shoppingList, setShopping } = useContext(ShoppingContext);
+export const ShoppingListScreen = ({ navigation }: Props) => (
   // console.log(shoppingList);
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>買い物リスト</Text>
-        <IconButton
-          name="plus"
-          color="#ffaf26"
-          onPress={() => navigation.navigate('ShoppingAdd')}
-        />
-      </View>
-      <ShoppingList shoppingList={shoppingList} />
-    </SafeAreaView>
-  );
-};
+  <SafeAreaView style={styles.container}>
+    <View style={styles.header}>
+      <Text style={styles.headerTitle}>買い物リスト</Text>
+      <IconButton
+        name="plus"
+        color="#ffaf26"
+        onPress={() => navigation.navigate('ShoppingAdd')}
+      />
+    </View>
+    <ShoppingList />
+  </SafeAreaView>
+);
 
 const styles = StyleSheet.create({
   container: {

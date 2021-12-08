@@ -3,7 +3,7 @@ import { StyleSheet, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProductsContext } from '../../contexts/productsContext';
 /* components */
-import { FloatingActionButton } from '../../components/FloatingActionButton';
+import { FloatingActionButton } from '../../components/common/FloatingActionButton';
 import { ProductList } from '../../components/ProductList';
 /* types */
 import { RootStackParamList } from '../../types/navigation';

@@ -5,8 +5,8 @@ import { RouteProp } from '@react-navigation/native';
 import { ProductsContext } from '../../contexts/productsContext';
 /* components */
 import { Product } from '../../components/Product';
-import { DeleteIconButton } from '../../components/DeleteIconButton';
-import { cancelAndOkAlert } from '../../components/CommonAlert';
+import { DeleteIconButton } from '../../components/common/DeleteIconButton';
+import { cancelAndOkAlert } from '../../components/common/CommonAlert';
 /* types */
 import { RootStackParamList } from '../../types/navigation';
 import { ProductForm } from '../../types/product';

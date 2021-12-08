@@ -16,8 +16,11 @@ import {
 } from 'firebase/firestore';
 import 'firebase/auth';
 import Constants from 'expo-constants';
+
 /* types */
 import { ProductType, ProductForm } from '../types/product';
+import { ShopTarget } from '../types/shopTarget';
+
 /* util */
 import { convDateToString } from '../util/convDateToString';
 
@@ -25,7 +28,7 @@ const firebaseApp = initializeApp(Constants.manifest.firebase);
 const db = getFirestore(firebaseApp);
 
 /** Productコレクションから全データを取得する */
-export const getProducts = async (): Promise<Product[]> => {
+export const getProducts = async (): Promise<ProductType[]> => {
   try {
     // const q = query(collection(db, 'product'), where('category', '==', '1'));
     const q = query(collection(db, 'product'), orderBy('createdAt', 'desc'));
@@ -108,4 +111,28 @@ export const updateProduct = async (
 /** Productコレクションのデータを削除する */
 export const deleteProduct = async (docId: string) => {
   await deleteDoc(doc(db, 'product', docId));
+};
+
+/** 買い物によってProductコレクションのデータを更新する */
+export const updateProductByShopping = async (shopTarget: ShopTarget) => {
+  const productRef = collection(db, 'product');
+  const newProductRef = doc(productRef);
+  await runTransaction(db, async (transaction) => {
+    await transaction.get(newProductRef).then(async () => {
+      const q = query(
+        collection(db, 'product'),
+        where('productName', '==', shopTarget.name),
+      );
+      const querySnapshot = await getDocs(q);
+      const targetData = querySnapshot.docs[0].data();
+
+      const productDocRef = doc(db, 'product', querySnapshot.docs[0].id);
+      const productData: ProductType = {
+        number: targetData.number + Number(shopTarget.number),
+        updatedAt: serverTimestamp(),
+      };
+
+      await updateDoc(productDocRef, productData);
+    });
+  });
 };

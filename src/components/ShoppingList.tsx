@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -9,22 +9,18 @@ import {
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
-import { StackNavigationProp } from '@react-navigation/stack';
-
-/* code */
-import { getCategoryName } from '../code/category';
-
 /* component */
-import { IconButton } from '../components/IconButton';
-import { FloatingActionButton } from '../components/FloatingActionButton';
+import { okAlert } from './common/CommonAlert';
+
+/* context */
+import { ShoppingContext } from '../contexts/shoppingContext';
+
+/* lib */
+import { updateProductByShopping } from '../lib/firebase';
 
 /* types */
 import { ShopTarget } from '../types/shopTarget';
 import { RootStackParamList } from '../types/navigation';
-
-type Props = {
-  shoppingList: string[];
-};
 
 const numberList = [
   { label: '2', value: '2' },
@@ -38,7 +34,11 @@ const numberList = [
   { label: '10', value: '10' },
 ];
 
-export const ShoppingList = ({ shoppingList }: Props) => {
+export const ShoppingList = () => {
+  const { shoppingList, setShoppingList } = useContext(ShoppingContext);
+  // 更新用にオブジェクト化した買い物リスト
+  const [shopTarget, setShopTarget] = useState<ShopTarget[]>([]);
+
   // 買い物リストの選択が変更される度に、shopTargetを再生成する
   useEffect(() => {
     const shopTargetNames = shopTarget.map((target) => target.name);
@@ -58,9 +58,6 @@ export const ShoppingList = ({ shoppingList }: Props) => {
     // 旧と新を合算させる
     setShopTarget([...remainTargetObj, ...newShopTargetObj]);
   }, [shoppingList]);
-
-  // 更新用にオブジェクト化した買い物リスト
-  const [shopTarget, setShopTarget] = useState<ShopTarget[]>([]);
 
   /**
    * 選択行とそれ以外の行を返却する
@@ -84,7 +81,6 @@ export const ShoppingList = ({ shoppingList }: Props) => {
     const { existsShopList, selectedProduct } = existsAndSelectedItem(item);
     selectedProduct.isSelected = !selectedProduct.isSelected;
     setShopTarget([...existsShopList, selectedProduct]);
-    console.log(shopTarget);
   };
 
   const renderItem = ({ item }: { item: string }) => {
@@ -124,6 +120,21 @@ export const ShoppingList = ({ shoppingList }: Props) => {
     );
   };
 
+  /**
+   * 購入ボタン押下時の処理
+   */
+  const onPressBuyButton = () => {
+    const buyTarget = shopTarget.filter((target) => target.isSelected);
+    console.log(buyTarget);
+    updateProductByShopping(buyTarget[0]);
+    // 選択したリストを一覧から除去する
+    // const remainTargetName = shopTarget
+    //   .filter((target) => !target.isSelected)
+    //   .map((filterTarget) => filterTarget.name);
+    // setShoppingList([...remainTargetName]);
+    // okAlert('完了', '購入が完了しました。', () => {});
+  };
+
   // 一件でも選択状態だった場合、購入ボタンを表示させる
   const isBuyReady = shopTarget.some((target) => target.isSelected);
 
@@ -137,7 +148,7 @@ export const ShoppingList = ({ shoppingList }: Props) => {
         />
         <TouchableOpacity
           style={styles.buyButton}
-          onPress={() => console.log(shopTarget)}
+          onPress={() => onPressBuyButton()}
         >
           <Text style={styles.buyText}>購入</Text>
         </TouchableOpacity>

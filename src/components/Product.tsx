@@ -15,7 +15,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as yup from 'yup';
 /* component */
-import { MEButton } from './Button';
+import { MEButton } from './common/Button';
 /* code */
 import { category } from '../code/category';
 /* types */

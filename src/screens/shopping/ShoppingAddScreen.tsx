@@ -15,7 +15,7 @@ import { ShoppingContext } from '../../contexts/shoppingContext';
 /* code */
 import { category } from '../../code/category';
 /* components */
-import { FloatingActionButton } from '../../components/FloatingActionButton';
+import { FloatingActionButton } from '../../components/common/FloatingActionButton';
 /* types */
 import { RootStackParamList } from '../../types/navigation';
 import { ProductType } from '../../types/product';
@@ -48,7 +48,7 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
       .map((m) => m.productName),
   }));
 
-  const { shoppingList, setShopping } = useContext(ShoppingContext);
+  const { shoppingList, setShoppingList } = useContext(ShoppingContext);
   /** 各商品のリスト */
   const Item = ({ product }: { product: string }) => {
     const isSelected = shoppingList.some((s) => s === product);
@@ -60,9 +60,9 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
         onPress={() => {
           if (shoppingList.some((s) => s === product)) {
             // 既に選択されている場合は除去する
-            setShopping(shoppingList.filter((s) => s !== product));
+            setShoppingList(shoppingList.filter((s) => s !== product));
           } else {
-            setShopping([...shoppingList, product]);
+            setShoppingList([...shoppingList, product]);
           }
         }}
       >

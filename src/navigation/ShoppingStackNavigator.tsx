@@ -9,10 +9,10 @@ import { ShoppingAddScreen } from '../screens/shopping/ShoppingAddScreen';
 const RootStack = createStackNavigator<RootStackParamList>();
 
 export const ShoppingStackNavigator = () => {
-  const [shoppingList, setShopping] = useState<string[]>([]);
+  const [shoppingList, setShoppingList] = useState<string[]>([]);
 
   return (
-    <ShoppingContext.Provider value={{ shoppingList, setShopping }}>
+    <ShoppingContext.Provider value={{ shoppingList, setShoppingList }}>
       <RootStack.Navigator>
         <RootStack.Screen
           name="ShoppingList"

@@ -4,8 +4,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ProductsContext } from '../../contexts/productsContext';
 /* components */
 import { Product } from '../../components/Product';
-import { IconButton } from '../../components/IconButton';
-import { cancelAndOkAlert } from '../../components/CommonAlert';
+import { IconButton } from '../../components/common/IconButton';
+import { cancelAndOkAlert } from '../../components/common/CommonAlert';
 /* types */
 import { RootStackParamList } from '../../types/navigation';
 import { ProductForm } from '../../types/product';
