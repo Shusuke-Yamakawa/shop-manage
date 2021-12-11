@@ -15,16 +15,14 @@ import {
   runTransaction,
 } from 'firebase/firestore';
 import 'firebase/auth';
-import Constants from 'expo-constants';
+import Moment from 'moment';
+import { firebaseConfig } from './firebaseConfig';
 
 /* types */
 import { ProductType, ProductForm } from '../types/product';
 import { ShopTarget } from '../types/shopTarget';
 
-/* util */
-import { convDateToString } from '../util/convDateToString';
-
-const firebaseApp = initializeApp(Constants.manifest.firebase);
+const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
 /** Productコレクションから全データを取得する */
@@ -53,7 +51,7 @@ export const addProduct = async (data: ProductForm) => {
       productName: data.productName,
       category: data.category,
       number: data.number,
-      limit: convDateToString(data.limit),
+      limit: Moment(data.limit).format('YYYY/MM/DD'),
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
@@ -88,23 +86,15 @@ export const updateProduct = async (
       productName: data.productName,
       category: data.category,
       number: data.number,
-      limit: convDateToString(data.limit),
+      limit: Moment(data.limit).format('YYYY/MM/DD'),
       updatedAt: serverTimestamp(),
     };
 
     const productDocRef = doc(db, 'product', product.id);
 
     await updateDoc(productDocRef, productData);
-
-    // 一覧画面に反映するため、既存の商品情報をセットして返却する
-    productData.productId = product.productId;
-    productData.createdAt = product.createdAt;
-    productData.id = product.id;
-
-    return productData;
   } catch (error) {
     console.log(error);
-    return null;
   }
 };
 

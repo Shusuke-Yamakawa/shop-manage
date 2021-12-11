@@ -11,6 +11,7 @@ export const category: DropList[] = [
   { label: '調味料', value: 'seasoning' },
   { label: '味の素系', value: 'soup_stock' },
   { label: '飲料', value: 'drink' },
+  { label: '冷凍もの', value: 'drink' },
   { label: 'その他', value: 'other' },
 ];
 

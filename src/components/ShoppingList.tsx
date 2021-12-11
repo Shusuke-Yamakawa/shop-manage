@@ -13,10 +13,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import { okAlert } from './common/CommonAlert';
 
 /* context */
+import { ProductsContext } from '../contexts/productsContext';
 import { ShoppingContext } from '../contexts/shoppingContext';
 
 /* lib */
-import { updateProductByShopping } from '../lib/firebase';
+import { updateProductByShopping, getProducts } from '../lib/firebase';
 
 /* types */
 import { ShopTarget } from '../types/shopTarget';
@@ -35,6 +36,7 @@ const numberList = [
 ];
 
 export const ShoppingList = () => {
+  const { setProducts } = useContext(ProductsContext);
   const { shoppingList, setShoppingList } = useContext(ShoppingContext);
   // 更新用にオブジェクト化した買い物リスト
   const [shopTarget, setShopTarget] = useState<ShopTarget[]>([]);
@@ -123,44 +125,36 @@ export const ShoppingList = () => {
   /**
    * 購入ボタン押下時の処理
    */
-  const onPressBuyButton = () => {
+  const onPressBuyButton = async () => {
     const buyTarget = shopTarget.filter((target) => target.isSelected);
-    console.log(buyTarget);
-    updateProductByShopping(buyTarget[0]);
+    await updateProductByShopping(buyTarget[0]);
+    setProducts(await getProducts());
     // 選択したリストを一覧から除去する
-    // const remainTargetName = shopTarget
-    //   .filter((target) => !target.isSelected)
-    //   .map((filterTarget) => filterTarget.name);
-    // setShoppingList([...remainTargetName]);
-    // okAlert('完了', '購入が完了しました。', () => {});
+    const remainTargetName = shopTarget
+      .filter((target) => !target.isSelected)
+      .map((filterTarget) => filterTarget.name);
+    setShoppingList([...remainTargetName]);
+    okAlert('完了', '購入が完了しました。', () => {});
   };
 
   // 一件でも選択状態だった場合、購入ボタンを表示させる
   const isBuyReady = shopTarget.some((target) => target.isSelected);
 
-  if (isBuyReady) {
-    return (
-      <View>
-        <FlatList
-          data={shoppingList}
-          renderItem={renderItem}
-          keyExtractor={(item) => String(item)}
-        />
-        <TouchableOpacity
-          style={styles.buyButton}
-          onPress={() => onPressBuyButton()}
-        >
-          <Text style={styles.buyText}>購入</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
   return (
-    <FlatList
-      data={shoppingList}
-      renderItem={renderItem}
-      keyExtractor={(item) => String(item)}
-    />
+    <View>
+      <FlatList
+        data={shoppingList}
+        renderItem={renderItem}
+        keyExtractor={(item) => String(item)}
+      />
+      <TouchableOpacity
+        style={isBuyReady ? styles.buyButton : null}
+        disabled={!isBuyReady}
+        onPress={() => onPressBuyButton()}
+      >
+        <Text style={styles.buyText}>{isBuyReady ? '購入' : ''}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 

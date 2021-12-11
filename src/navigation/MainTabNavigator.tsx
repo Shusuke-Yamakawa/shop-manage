@@ -8,8 +8,8 @@ const Tab = createBottomTabNavigator();
 
 export const MainTabNavigator = () => (
   <Tab.Navigator
-    tabBarOptions={{
-      keyboardHidesTabBar: true,
+    screenOptions={{
+      tabBarHideOnKeyboard: true,
     }}
   >
     <Tab.Screen

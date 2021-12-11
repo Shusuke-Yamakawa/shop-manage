@@ -11,7 +11,7 @@ import { cancelAndOkAlert } from '../../components/common/CommonAlert';
 import { RootStackParamList } from '../../types/navigation';
 import { ProductForm } from '../../types/product';
 /* lib */
-import { updateProduct, deleteProduct } from '../../lib/firebase';
+import { getProducts, updateProduct, deleteProduct } from '../../lib/firebase';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductDetail'>;
@@ -23,9 +23,8 @@ export const ProductDetail = ({ navigation, route }: Props) => {
   const { product } = route.params;
 
   const updateData = async (data: ProductForm) => {
-    const resultProduct = await updateProduct(data, product);
-    const existsProducts = products.filter((prod) => prod.id !== product.id);
-    setProducts([resultProduct, ...existsProducts]);
+    await updateProduct(data, product);
+    setProducts(await getProducts());
     navigation.goBack();
   };
 
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 30,
+    paddingHorizontal: 25,
   },
 });

@@ -14,14 +14,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as yup from 'yup';
+import Moment from 'moment';
 /* component */
 import { MEButton } from './common/Button';
 /* code */
 import { category } from '../code/category';
 /* types */
 import { ProductType, ProductForm } from '../types/product';
-/* util */
-import { convDateToString } from '../util/convDateToString';
 
 type Props = {
   buttonText: string;
@@ -66,8 +65,8 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
 
   const onChangeDate = (event: Event, selectedDate: Date) => {
     const currentDate = selectedDate || prodLimit;
-    setShow(Platform.OS === 'ios');
-    setProdLimit(convDateToString(currentDate));
+    setProdLimit(Moment(currentDate).format('YYYY/MM/DD'));
+    setShow(false);
   };
 
   const showDatePicker = () => {
