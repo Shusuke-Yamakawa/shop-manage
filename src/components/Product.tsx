@@ -97,7 +97,7 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View>
         <View style={styles.inputLine}>
-          <Text style={styles.text}>商品名</Text>
+          <Text style={styles.textLabel}>商品名</Text>
           <Controller
             name="productName"
             control={control}
@@ -118,7 +118,7 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
           <Text style={styles.errorText}>{errors.productName.message}</Text>
         )}
         <View style={styles.inputLine}>
-          <Text style={styles.text}>数量</Text>
+          <Text style={styles.textLabel}>数量</Text>
           <Controller
             name="number"
             control={control}
@@ -141,13 +141,13 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
         )}
 
         <View style={styles.inputLine}>
-          <Text style={styles.text}>カテゴリー</Text>
+          <Text style={styles.textLabel}>カテゴリー</Text>
           <Controller
             name="category"
             control={control}
             render={({ field: { onChange } }) => (
               <RNPickerSelect
-                placeholder={{ label: '選択してください', value: '' }}
+                placeholder={{ label: '', value: '' }}
                 onValueChange={(input) => {
                   setProdCategory(input);
                   onChange(input);
@@ -163,7 +163,7 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
           <Text style={styles.errorText}>{errors.category.message}</Text>
         )}
         <View style={styles.inputLine}>
-          <Text style={styles.text}>消費期限</Text>
+          <Text style={styles.textLabel}>消費期限</Text>
           <TouchableOpacity style={styles.limitBox} onPress={showDatePicker}>
             <TextInput
               style={styles.limitInput}
@@ -178,7 +178,7 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
             render={({ field: { onChange } }) => (
               <DateTimePickerModal
                 isVisible={showDate}
-                display={Platform.OS === 'android' ? 'default' : 'inline'}
+                display={Platform.OS === 'android' ? 'default' : 'spinner'}
                 date={prodLimit ? Moment(prodLimit).toDate() : new Date()}
                 onConfirm={(currentDate: Date) => {
                   onChangeDate(currentDate);
@@ -208,10 +208,9 @@ const styles = StyleSheet.create({
   inputLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: 25,
   },
-  text: {
-    alignItems: 'flex-start',
+  textLabel: {
     fontSize: 16,
   },
   textInput: {

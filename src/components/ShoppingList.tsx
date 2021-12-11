@@ -141,11 +141,11 @@ export const ShoppingList = () => {
   const isBuyReady = shopTarget.some((target) => target.isSelected);
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         data={shoppingList}
         renderItem={renderItem}
-        keyExtractor={(item) => String(item)}
+        keyExtractor={(index) => index.toString()}
       />
       <TouchableOpacity
         style={isBuyReady ? styles.buyButton : null}
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   numberContainer: {
     flexDirection: 'row',
-    left: 20,
+    left: 10,
   },
   numberText: {
     top: 16,
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#008000',
     position: 'absolute',
     top: 430,
-    left: 340,
+    left: 320,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -212,7 +212,9 @@ const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
     color: 'black',
-    width: 70,
+    width: 100,
+    marginTop: 15,
+    marginLeft: 5,
   },
   inputAndroid: {
     fontSize: 16,

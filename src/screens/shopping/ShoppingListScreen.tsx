@@ -16,7 +16,6 @@ type Props = {
 };
 
 export const ShoppingListScreen = ({ navigation }: Props) => (
-  // console.log(shoppingList);
   <SafeAreaView style={styles.container}>
     <View style={styles.header}>
       <Text style={styles.headerTitle}>買い物リスト</Text>

@@ -7,11 +7,7 @@ import { ShoppingStackNavigator } from './ShoppingStackNavigator';
 const Tab = createBottomTabNavigator();
 
 export const MainTabNavigator = () => (
-  <Tab.Navigator
-    screenOptions={{
-      tabBarHideOnKeyboard: true,
-    }}
-  >
+  <Tab.Navigator>
     <Tab.Screen
       name="食材管理"
       component={ProductStackNavigator}
