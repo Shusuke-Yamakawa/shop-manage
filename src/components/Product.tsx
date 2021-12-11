@@ -12,7 +12,7 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import RNPickerSelect from 'react-native-picker-select';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as yup from 'yup';
 import Moment from 'moment';
 /* component */
@@ -61,16 +61,19 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
   /**
    * 消費期限関連の設定
    */
-  const [show, setShow] = useState(false);
+  const [showDate, setShowDate] = useState(false);
 
-  const onChangeDate = (event: Event, selectedDate: Date) => {
-    const currentDate = selectedDate || prodLimit;
-    setProdLimit(Moment(currentDate).format('YYYY/MM/DD'));
-    setShow(false);
+  const onChangeDate = (selectedDate: Date) => {
+    setShowDate(false);
+    setProdLimit(Moment(selectedDate).format('YYYY/MM/DD'));
   };
 
   const showDatePicker = () => {
-    setShow(true);
+    setShowDate(true);
+  };
+
+  const hideDatePicker = () => {
+    setShowDate(false);
   };
 
   /**
@@ -161,7 +164,7 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
         )}
         <View style={styles.inputLine}>
           <Text style={styles.text}>消費期限</Text>
-          <TouchableOpacity style={styles.textInput} onPress={showDatePicker}>
+          <TouchableOpacity style={styles.limitBox} onPress={showDatePicker}>
             <TextInput
               style={styles.limitInput}
               value={prodLimit}
@@ -169,22 +172,25 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
             />
           </TouchableOpacity>
 
-          {show && (
-            <Controller
-              name="limit"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <DateTimePicker
-                  value={new Date()}
-                  onChange={(event: Event, currentDate: Date) => {
-                    onChangeDate(event, currentDate);
-                    onChange(currentDate);
-                  }}
-                  minimumDate={new Date()}
-                />
-              )}
-            />
-          )}
+          <Controller
+            name="limit"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <DateTimePickerModal
+                isVisible={showDate}
+                display={Platform.OS === 'android' ? 'default' : 'inline'}
+                date={prodLimit ? Moment(prodLimit).toDate() : new Date()}
+                onConfirm={(currentDate: Date) => {
+                  onChangeDate(currentDate);
+                  onChange(currentDate);
+                }}
+                onCancel={() => {
+                  hideDatePicker();
+                }}
+                minimumDate={new Date()}
+              />
+            )}
+          />
         </View>
         {errors.limit && (
           <Text style={styles.errorText}>{errors.limit.message}</Text>
@@ -209,10 +215,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textInput: {
+    marginLeft: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     width: '70%',
     fontSize: 16,
+  },
+  limitBox: {
+    marginLeft: 40,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#789',
+    borderRadius: 4,
+    color: '#789',
+    paddingRight: 30,
+    width: 250,
   },
   limitInput: {
     fontSize: 16,
@@ -237,7 +255,7 @@ const pickerSelectStyles = StyleSheet.create({
     color: '#789',
     paddingRight: 30,
     width: 250,
-    marginLeft: 30,
+    marginLeft: 25,
   },
   inputAndroid: {
     fontSize: 16,
