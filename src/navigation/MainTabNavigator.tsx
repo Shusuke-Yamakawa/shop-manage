@@ -16,8 +16,7 @@ export const MainTabNavigator = () => (
         tabBarIcon: ({ color, size }) => (
           <Feather name="home" color={color} size={size} />
         ),
-        headerTitleAlign: 'center',
-        headerTitleStyle: { fontSize: 24 },
+        headerShown: false,
       }}
     />
     <Tab.Screen

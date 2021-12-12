@@ -17,3 +17,8 @@ export type ProductForm = {
   category: string;
   limit: Date;
 };
+
+export type ProductsUseValue = {
+  products: ProductType[];
+  setProducts: (products: ProductType[]) => void;
+};

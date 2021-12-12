@@ -1,12 +1,7 @@
 import { createContext } from 'react';
-import { ProductType } from '../types/product';
+import { ProductsUseValue } from '../types/product';
 
-type ProductsContextValue = {
-  products: ProductType[];
-  setProducts: (products: ProductType[]) => void;
-};
-
-export const ProductsContext = createContext<ProductsContextValue>({
+export const ProductsContext = createContext<ProductsUseValue>({
   products: [],
   setProducts: () => {},
 });
