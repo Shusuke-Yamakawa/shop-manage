@@ -8,21 +8,17 @@ import {
   SafeAreaView,
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-
 /* component */
 import { okAlert } from './common/CommonAlert';
-
 /* context */
 import { ProductsContext } from '../contexts/productsContext';
 import { ShoppingContext } from '../contexts/shoppingContext';
-
 /* lib */
 import { updateProductByShopping, getProducts } from '../lib/firebase';
-
 /* types */
 import { ShopTarget } from '../types/shopTarget';
-import { RootStackParamList } from '../types/navigation';
 
+// 数量の選択リスト
 const numberList = [
   { label: '2', value: '2' },
   { label: '3', value: '3' },
@@ -35,16 +31,22 @@ const numberList = [
   { label: '10', value: '10' },
 ];
 
+/**
+ * 買い物リスト表示用のコンポーネント
+ */
 export const ShoppingList = () => {
   const { setProducts } = useContext(ProductsContext);
+  // 買い物リスト選択で選択された買い物リスト
   const { shoppingList, setShoppingList } = useContext(ShoppingContext);
   // 更新用にオブジェクト化した買い物リスト
   const [shopTarget, setShopTarget] = useState<ShopTarget[]>([]);
 
-  // 買い物リストの選択が変更される度に、shopTargetを再生成する
+  /**
+   * 買い物リストの選択が変更される度に、shopTargetを再生成する
+   */
   useEffect(() => {
     const shopTargetNames = shopTarget.map((target) => target.name);
-    // 既存のオブジェクトは変更を加えない
+    // 変更対象でないオブジェクトを抽出する
     const remainTargetObj = shopTarget.filter((target) =>
       shoppingList.includes(target.name),
     );
@@ -62,25 +64,27 @@ export const ShoppingList = () => {
   }, [shoppingList]);
 
   /**
-   * 選択行とそれ以外の行を返却する
-   * @param item 選択行
+   * 選択行とそれ以外の行をそれぞれ返却する
+   * @param productName 選択行の商品名
    */
-  const existsAndSelectedItem = (item: string) => {
+  const existsAndSelectedItem = (productName: string) => {
     const existsShopList = shopTarget.filter(
-      (product) => product.name !== item,
+      (product) => product.name !== productName,
     );
     const selectedProduct =
-      shopTarget.find((product) => product.name === item) ??
+      shopTarget.find((product) => product.name === productName) ??
       shopTarget[shopTarget.length - 1];
     return { existsShopList, selectedProduct };
   };
 
   /**
    * リスト選択時の処理
-   * @param item 選択行
+   * @param productName 選択行の商品名
    */
-  const onPressProduct = (item: string) => {
-    const { existsShopList, selectedProduct } = existsAndSelectedItem(item);
+  const onPressProduct = (productName: string) => {
+    const { existsShopList, selectedProduct } =
+      existsAndSelectedItem(productName);
+    // 選択状態にする（選択状態の場合は解除する）
     selectedProduct.isSelected = !selectedProduct.isSelected;
     setShopTarget([...existsShopList, selectedProduct]);
   };
@@ -127,6 +131,7 @@ export const ShoppingList = () => {
    */
   const onPressBuyButton = async () => {
     const buyTarget = shopTarget.filter((target) => target.isSelected);
+    // TODO 更新処理を実装する
     await updateProductByShopping(buyTarget[0]);
     setProducts(await getProducts());
     // 選択したリストを一覧から除去する

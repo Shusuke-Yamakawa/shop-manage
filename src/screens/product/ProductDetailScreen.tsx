@@ -66,7 +66,7 @@ export const ProductDetail = ({ navigation, route }: Props) => {
       <Product
         buttonText="更新"
         selectProduct={product}
-        onSubmit={(data) => onSubmit(data)}
+        onSubmit={(formData) => onSubmit(formData)}
       />
     </SafeAreaView>
   );

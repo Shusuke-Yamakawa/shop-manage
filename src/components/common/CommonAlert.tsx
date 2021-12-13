@@ -1,16 +1,12 @@
 import { Alert } from 'react-native';
 
-/* 呼び出し方（例）
- * import { okAlert, cancelAndOkAlert } from '../common/CommonAlert';
- */
-
 /* [引数]
  *
  * ~ 必須 ~
  * title: string
- * ~ 省略可能 ~
  * message: string
  * onPress: 関数
+ * ~ 省略可能 ~
  * cancelable: boolean
  */
 export const okAlert = (
@@ -32,10 +28,10 @@ export const okAlert = (
  *
  * ~ 必須 ~
  * title: string
- * ~ 省略可能 ~
  * message: string
  * onPressOk: 関数
  * onPressCancel: 関数
+ * ~ 省略可能 ~
  * cancelable: boolean
  */
 export const cancelAndOkAlert = (

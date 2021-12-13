@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  GestureResponderEvent,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-
-const SIZE = 56;
 
 type Props = {
   iconName: React.ComponentProps<typeof Feather>['name'];
-  onPress: (event: GestureResponderEvent) => void;
+  onPress: () => void;
 };
 
 export const FloatingActionButton = ({ iconName, onPress }: Props) => (
@@ -21,9 +15,9 @@ export const FloatingActionButton = ({ iconName, onPress }: Props) => (
 
 const styles = StyleSheet.create({
   container: {
-    width: SIZE,
-    height: SIZE,
-    borderRadius: SIZE / 2,
+    width: 56,
+    height: 56,
+    borderRadius: 56 / 2,
     backgroundColor: '#900',
     position: 'absolute',
     right: 16,

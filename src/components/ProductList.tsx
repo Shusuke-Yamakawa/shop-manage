@@ -8,11 +8,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
 /* types */
 import { ProductType } from '../types/product';
 import { RootStackParamList } from '../types/navigation';
-
 /* code */
 import { getCategoryName } from '../code/category';
 
@@ -21,6 +19,9 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductList'>;
 };
 
+/**
+ * 商品一覧表示用のコンポーネント
+ */
 export const ProductList = ({ products, navigation }: Props) => {
   const onPressProduct = (product: ProductType) => {
     navigation.navigate('ProductDetail', { product });

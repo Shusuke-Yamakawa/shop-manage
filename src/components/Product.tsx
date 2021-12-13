@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -25,7 +25,8 @@ import { ProductType, ProductForm } from '../types/product';
 type Props = {
   buttonText: string;
   selectProduct?: ProductType;
-  onSubmit: (data: ProductForm) => void;
+  // eslint-disable-next-line no-unused-vars
+  onSubmit: (formData: ProductForm) => void;
 };
 
 /**
@@ -41,6 +42,9 @@ const schema = yup.object().shape({
   limit: yup.date().required('消費期限を入力してください'),
 });
 
+/**
+ * 商品登録／更新用のコンポーネント
+ */
 export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
   /**
    * 画面項目のstate
@@ -61,19 +65,19 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
   /**
    * 消費期限関連の設定
    */
-  const [showDate, setShowDate] = useState(false);
+  const [displayDatePicker, setDisplayDatePicker] = useState(false);
 
   const onChangeDate = (selectedDate: Date) => {
-    setShowDate(false);
+    setDisplayDatePicker(false);
     setProdLimit(Moment(selectedDate).format('YYYY/MM/DD'));
   };
 
   const showDatePicker = () => {
-    setShowDate(true);
+    setDisplayDatePicker(true);
   };
 
   const hideDatePicker = () => {
-    setShowDate(false);
+    setDisplayDatePicker(false);
   };
 
   /**
@@ -177,7 +181,7 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
             control={control}
             render={({ field: { onChange } }) => (
               <DateTimePickerModal
-                isVisible={showDate}
+                isVisible={displayDatePicker}
                 display={Platform.OS === 'android' ? 'default' : 'spinner'}
                 date={prodLimit ? Moment(prodLimit).toDate() : new Date()}
                 onConfirm={(currentDate: Date) => {
@@ -197,12 +201,14 @@ export const Product = ({ buttonText, selectProduct, onSubmit }: Props) => {
         )}
         <MEButton
           text={buttonText}
-          onPress={handleSubmit((data) => onSubmit(data))}
+          onPress={handleSubmit((formData) => onSubmit(formData))}
         />
       </View>
     </TouchableWithoutFeedback>
   );
 };
+
+Product.defaultProps = { selectProduct: null };
 
 const styles = StyleSheet.create({
   inputLine: {

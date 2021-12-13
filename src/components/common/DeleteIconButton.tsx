@@ -1,21 +1,19 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  GestureResponderEvent,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
-  onPress: (event: GestureResponderEvent) => void;
+  onPress: () => void;
   color?: string;
 };
 
-export const DeleteIconButton = ({ onPress, color = '#000' }: Props) => (
+export const DeleteIconButton = ({ onPress, color }: Props) => (
   <TouchableOpacity onPress={onPress} style={styles.container}>
     <AntDesign name="delete" color={color} size={32} />
   </TouchableOpacity>
 );
+
+DeleteIconButton.defaultProps = { color: '#000' };
 
 const styles = StyleSheet.create({
   container: {

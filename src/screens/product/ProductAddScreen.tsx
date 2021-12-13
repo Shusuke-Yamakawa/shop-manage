@@ -33,7 +33,7 @@ export const ProductAdd = ({ navigation }: Props) => {
   };
 
   /** データをFirestoreに追加し、一覧画面に反映させた上で遷移する */
-  const onSubmit = async (data: ProductForm) => {
+  const onSubmit = (data: ProductForm) => {
     cancelAndOkAlert(
       '商品を登録します',
       'よろしいですか？',
@@ -44,7 +44,7 @@ export const ProductAdd = ({ navigation }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Product buttonText="登録" onSubmit={(data) => onSubmit(data)} />
+      <Product buttonText="登録" onSubmit={(formData) => onSubmit(formData)} />
     </SafeAreaView>
   );
 };
