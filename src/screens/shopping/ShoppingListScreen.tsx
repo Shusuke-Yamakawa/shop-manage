@@ -1,13 +1,9 @@
-import React, { useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* components */
-import { RouteProp } from '@react-navigation/native';
 import { IconButton } from '../../components/common/IconButton';
 import { ShoppingList } from '../../components/ShoppingList';
-import { FloatingActionButton } from '../../components/common/FloatingActionButton';
-/* context */
-import { ShoppingContext } from '../../contexts/shoppingContext';
 /* styles */
 import commonStyles from '../../styles/CommonStyles';
 /* types */
@@ -17,6 +13,9 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ShoppingList'>;
 };
 
+/**
+ * 買い物リスト一覧画面
+ */
 export const ShoppingListScreen = ({ navigation }: Props) => (
   <SafeAreaView style={styles.container}>
     <View style={commonStyles.header}>

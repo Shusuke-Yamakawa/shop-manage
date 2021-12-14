@@ -16,7 +16,6 @@ import {
   drinkAndIceFood,
 } from '../../code/category';
 /* components */
-import { FloatingActionButton } from '../../components/common/FloatingActionButton';
 import { IconButton } from '../../components/common/IconButton';
 import { ProductList } from '../../components/ProductList';
 /* styles */
@@ -31,9 +30,20 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductList'>;
 };
 
+/**
+ * 商品一覧画面
+ */
 export const ProductListScreen = ({ navigation }: Props) => {
+  // Firestoreから取得した全ての商品リスト
   const { products, setProducts } = useContext(ProductsContext);
+  // 一覧画面に表示する用の商品リスト（選択したカテゴリーごとに切り替える）
   const [selectProducts, setSelectProducts] = useState<ProductType[]>([]);
+
+  const getFirebaseItems = async () => {
+    const getProds = await getProducts();
+    setProducts(getProds);
+    setSelectProducts(getProds);
+  };
 
   useEffect(() => {
     if (products.length === 0) {
@@ -44,12 +54,6 @@ export const ProductListScreen = ({ navigation }: Props) => {
       setSelectProducts(products);
     }
   }, [products]);
-
-  const getFirebaseItems = async () => {
-    const getProds = await getProducts();
-    setProducts(getProds);
-    setSelectProducts(getProds);
-  };
 
   /**
    * 全ての商品を表示する

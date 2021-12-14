@@ -16,6 +16,9 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductAdd'>;
 };
 
+/**
+ * 商品追加画面
+ */
 export const ProductAdd = ({ navigation }: Props) => {
   const { products, setProducts } = useContext(ProductsContext);
 

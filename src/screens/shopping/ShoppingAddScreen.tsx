@@ -1,29 +1,27 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import {
   StyleSheet,
   Text,
-  View,
   SafeAreaView,
   SectionList,
   TouchableOpacity,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
 /* context */
 import { ProductsContext } from '../../contexts/productsContext';
 import { ShoppingContext } from '../../contexts/shoppingContext';
 /* code */
 import { category } from '../../code/category';
-/* components */
-import { FloatingActionButton } from '../../components/common/FloatingActionButton';
 /* types */
 import { RootStackParamList } from '../../types/navigation';
-import { ProductType } from '../../types/product';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ShoppingAdd'>;
 };
 
+/**
+ * 買い物リスト追加画面
+ */
 export const ShoppingAddScreen = ({ navigation }: Props) => {
   navigation.setOptions({
     title: '買うものを選択',
@@ -41,8 +39,10 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
     ),
   });
   const { products } = useContext(ProductsContext);
+  // sectionListのデータとして活用できるようにカテゴリーを変換する
   const productData = category.map((c) => ({
     title: c.label,
+    // カテゴリーごとに商品名の配列を設定する
     data: products
       .filter((p) => p.category === c.value)
       .map((m) => m.productName),
@@ -56,12 +56,12 @@ export const ShoppingAddScreen = ({ navigation }: Props) => {
     return (
       <TouchableOpacity
         style={[styles.item, isSelected ? styles.selectedItem : null]}
-        /** 選択した商品を買い物リストに追加する */
         onPress={() => {
           if (shoppingList.some((s) => s === product)) {
-            // 既に選択されている場合は除去する
+            // 選択状態にある買い物リストを対象から除外する
             setShoppingList(shoppingList.filter((s) => s !== product));
           } else {
+            // 選択した商品を買い物リストに追加する
             setShoppingList([...shoppingList, product]);
           }
         }}

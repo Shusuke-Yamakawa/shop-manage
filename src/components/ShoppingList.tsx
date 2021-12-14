@@ -131,8 +131,10 @@ export const ShoppingList = () => {
    */
   const onPressBuyButton = async () => {
     const buyTarget = shopTarget.filter((target) => target.isSelected);
-    // TODO 更新処理を実装する
-    await updateProductByShopping(buyTarget[0]);
+    // Firestoreに更新する
+    await Promise.all(
+      buyTarget.map((target) => updateProductByShopping(target)),
+    );
     setProducts(await getProducts());
     // 選択したリストを一覧から除去する
     const remainTargetName = shopTarget

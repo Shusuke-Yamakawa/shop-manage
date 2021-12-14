@@ -1,4 +1,4 @@
-import { initializeApp, getApps } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import {
   getFirestore,
   collection,
@@ -8,7 +8,6 @@ import {
   where,
   getDocs,
   doc,
-  setDoc,
   updateDoc,
   deleteDoc,
   serverTimestamp,
@@ -22,20 +21,22 @@ import { firebaseConfig } from './firebaseConfig';
 import { ProductType, ProductForm } from '../types/product';
 import { ShopTarget } from '../types/shopTarget';
 
-const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp = !getApps().length
+  ? initializeApp(firebaseConfig)
+  : getApp();
 const db = getFirestore(firebaseApp);
 
 /** Productコレクションから全データを取得する */
 export const getProducts = async (): Promise<ProductType[]> => {
   try {
-    // const q = query(collection(db, 'product'), where('category', '==', '1'));
     const q = query(collection(db, 'product'), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     const products = querySnapshot.docs.map(
-      (doc) => ({ ...doc.data(), id: doc.id } as ProductType),
+      (d) => ({ ...d.data(), id: d.id } as ProductType),
     );
     return products;
   } catch (err) {
+    // TODO sentryなどに送信 ※errorBoundaryの仕組み構築
     console.log(err);
     return [];
   }
@@ -58,19 +59,20 @@ export const addProduct = async (data: ProductForm) => {
 
     await runTransaction(db, async (transaction) => {
       await transaction.get(newProductRef).then(async () => {
-        // 最新を1件を取得し、productIdの連番を作成する
+        // 最新の1件を取得し、productIdの連番を作成する
         const q = query(productRef, orderBy('createdAt', 'desc'), limit(1));
         const querySnapshot = await getDocs(q);
         const latestProduct = querySnapshot.docs[0].data();
         const newProductId = latestProduct.productId + 1;
         product.productId = newProductId;
-
+        // 新規Productのデータを作成する
         transaction.set(newProductRef, product);
       });
     });
     product.id = newProductRef.id;
     return product;
   } catch (error) {
+    // TODO sentryなどに送信 ※errorBoundaryの仕組み構築
     console.log(error);
     return null;
   }
@@ -78,51 +80,62 @@ export const addProduct = async (data: ProductForm) => {
 
 /** Productコレクションのデータを更新する */
 export const updateProduct = async (
-  data: ProductForm,
+  formData: ProductForm,
   product: ProductType,
 ) => {
   try {
     const productData: ProductType = {
-      productName: data.productName,
-      category: data.category,
-      number: data.number,
-      limit: Moment(data.limit).format('YYYY/MM/DD'),
+      productName: formData.productName,
+      category: formData.category,
+      number: formData.number,
+      limit: Moment(formData.limit).format('YYYY/MM/DD'),
       updatedAt: serverTimestamp(),
     };
-
     const productDocRef = doc(db, 'product', product.id);
 
     await updateDoc(productDocRef, productData);
   } catch (error) {
+    // TODO sentryなどに送信 ※errorBoundaryの仕組み構築
     console.log(error);
   }
 };
 
 /** Productコレクションのデータを削除する */
 export const deleteProduct = async (docId: string) => {
-  await deleteDoc(doc(db, 'product', docId));
+  try {
+    await deleteDoc(doc(db, 'product', docId));
+  } catch (error) {
+    // TODO sentryなどに送信 ※errorBoundaryの仕組み構築
+    console.log(error);
+  }
 };
 
 /** 買い物によってProductコレクションのデータを更新する */
 export const updateProductByShopping = async (shopTarget: ShopTarget) => {
-  const productRef = collection(db, 'product');
-  const newProductRef = doc(productRef);
-  await runTransaction(db, async (transaction) => {
-    await transaction.get(newProductRef).then(async () => {
-      const q = query(
-        collection(db, 'product'),
-        where('productName', '==', shopTarget.name),
-      );
-      const querySnapshot = await getDocs(q);
-      const targetData = querySnapshot.docs[0].data();
+  try {
+    const productRef = collection(db, 'product');
+    const newProductRef = doc(productRef);
+    // 商品名で更新対象を特定し、数量を更新する
+    await runTransaction(db, async (transaction) => {
+      await transaction.get(newProductRef).then(async () => {
+        const q = query(
+          collection(db, 'product'),
+          where('productName', '==', shopTarget.name),
+        );
+        const querySnapshot = await getDocs(q);
+        const targetData = querySnapshot.docs[0].data();
 
-      const productDocRef = doc(db, 'product', querySnapshot.docs[0].id);
-      const productData: ProductType = {
-        number: targetData.number + Number(shopTarget.number),
-        updatedAt: serverTimestamp(),
-      };
+        const productDocRef = doc(db, 'product', querySnapshot.docs[0].id);
+        const productData: ProductType = {
+          number: targetData.number + Number(shopTarget.number),
+          updatedAt: serverTimestamp(),
+        };
 
-      await updateDoc(productDocRef, productData);
+        await updateDoc(productDocRef, productData);
+      });
     });
-  });
+  } catch (error) {
+    // TODO sentryなどに送信 ※errorBoundaryの仕組み構築
+    console.log(error);
+  }
 };

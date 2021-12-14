@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { ProductsContext } from '../../contexts/productsContext';
@@ -18,6 +18,9 @@ type Props = {
   route: RouteProp<RootStackParamList, 'ProductDetail'>;
 };
 
+/**
+ * 商品更新画面
+ */
 export const ProductDetail = ({ navigation, route }: Props) => {
   const { products, setProducts } = useContext(ProductsContext);
   const { product } = route.params;
@@ -37,6 +40,7 @@ export const ProductDetail = ({ navigation, route }: Props) => {
       () => {},
     );
   };
+
   const deleteData = async (docId: string) => {
     // Firestoreからデータ削除し、一覧画面に反映させて遷移する
     await deleteProduct(docId);
