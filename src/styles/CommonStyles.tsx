@@ -5,7 +5,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    height: 70,
+    height: 80,
     borderBottomWidth: 5,
     borderColor: 'rgba(0, 0, 0,  0.15)',
   },

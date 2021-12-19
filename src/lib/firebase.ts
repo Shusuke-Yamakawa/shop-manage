@@ -6,20 +6,23 @@ import {
   orderBy,
   limit,
   where,
+  getDoc,
   getDocs,
   doc,
-  updateDoc,
   deleteDoc,
+  setDoc,
+  updateDoc,
   serverTimestamp,
   runTransaction,
 } from 'firebase/firestore';
-import 'firebase/auth';
+import { getAuth, signInAnonymously } from 'firebase/auth';
 import Moment from 'moment';
 import { firebaseConfig } from './firebaseConfig';
 
 /* types */
 import { ProductType, ProductForm } from '../types/product';
 import { ShopTarget } from '../types/shopTarget';
+import { UserType, initialUser } from '../types/user';
 
 const firebaseApp = !getApps().length
   ? initializeApp(firebaseConfig)
@@ -138,4 +141,24 @@ export const updateProductByShopping = async (shopTarget: ShopTarget) => {
     // TODO sentryなどに送信 ※errorBoundaryの仕組み構築
     console.log(error);
   }
+};
+
+/** 匿名ログイン */
+export const signIn = async () => {
+  const userCredential = await signInAnonymously(getAuth());
+  const { uid } = userCredential.user;
+  const userRef = doc(db, 'users', uid);
+  const userDoc = await getDoc(userRef);
+  // 初回ログイン時はFirestoreにデータを作成する
+  if (!userDoc.data()) {
+    await setDoc(userRef, initialUser);
+    return {
+      ...initialUser,
+      id: uid,
+    } as UserType;
+  }
+  return {
+    id: uid,
+    ...userDoc.data(),
+  } as UserType;
 };

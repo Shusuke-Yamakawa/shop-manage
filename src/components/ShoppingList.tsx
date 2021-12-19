@@ -116,7 +116,6 @@ export const ShoppingList = () => {
                 selectedProduct.number = input;
                 setShopTarget([...existsShopList, selectedProduct]);
               }}
-              itemKey="1"
               style={pickerSelectStyles}
               items={numberList}
             />

@@ -17,6 +17,7 @@ import {
 } from '../../code/category';
 /* components */
 import { IconButton } from '../../components/common/IconButton';
+import { Loading } from '../../components/common/Loading';
 import { ProductList } from '../../components/ProductList';
 /* styles */
 import commonStyles from '../../styles/CommonStyles';
@@ -38,11 +39,14 @@ export const ProductListScreen = ({ navigation }: Props) => {
   const { products, setProducts } = useContext(ProductsContext);
   // 一覧画面に表示する用の商品リスト（選択したカテゴリーごとに切り替える）
   const [selectProducts, setSelectProducts] = useState<ProductType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getFirebaseItems = async () => {
+    setIsLoading(true);
     const getProds = await getProducts();
     setProducts(getProds);
     setSelectProducts(getProds);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -107,6 +111,7 @@ export const ProductListScreen = ({ navigation }: Props) => {
         ))}
       </View>
       <ProductList products={selectProducts} navigation={navigation} />
+      <Loading visible={isLoading} />
     </SafeAreaView>
   );
 };
