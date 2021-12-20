@@ -190,10 +190,10 @@ const styles = StyleSheet.create({
   },
   numberContainer: {
     flexDirection: 'row',
-    left: 10,
+    left: 15,
   },
   numberText: {
-    top: 16,
+    top: 15,
     fontSize: 16,
     color: '#000',
   },
@@ -218,13 +218,14 @@ const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
     color: 'black',
-    width: 100,
+    width: 90,
     marginTop: 15,
     marginLeft: 5,
   },
   inputAndroid: {
     fontSize: 16,
     color: 'black',
-    width: 70,
+    width: 90,
+    marginLeft: 5,
   },
 });
