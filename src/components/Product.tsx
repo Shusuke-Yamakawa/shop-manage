@@ -37,7 +37,8 @@ const schema = yup.object().shape({
   number: yup
     .number()
     .required('数量を入力してください')
-    .typeError('数字を入力してください'),
+    .typeError('数字を入力してください')
+    .max(5, '5桁以内と入力してください'),
   category: yup.string().required('カテゴリーを入力してください'),
   limit: yup.date().required('消費期限を入力してください'),
 });

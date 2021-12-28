@@ -43,9 +43,11 @@ export const ProductListScreen = ({ navigation }: Props) => {
 
   const getFirebaseItems = async () => {
     setIsLoading(true);
+
     const getProds = await getProducts();
     setProducts(getProds);
     setSelectProducts(getProds);
+
     setIsLoading(false);
   };
 
