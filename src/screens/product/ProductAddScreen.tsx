@@ -31,7 +31,7 @@ export const ProductAdd = ({ navigation }: Props) => {
 
   const register = async (data: ProductForm) => {
     const resultProduct = await addProduct(data);
-    setProducts([resultProduct, ...products]);
+    setProducts([resultProduct!, ...products]);
     navigation.goBack();
   };
 

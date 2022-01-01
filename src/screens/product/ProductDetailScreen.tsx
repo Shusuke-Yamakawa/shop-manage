@@ -57,7 +57,7 @@ export const ProductDetail = ({ navigation, route }: Props) => {
           cancelAndOkAlert(
             '商品を削除します',
             'よろしいですか？',
-            () => deleteData(product.id),
+            () => deleteData(product.id!),
             () => {},
           );
         }}

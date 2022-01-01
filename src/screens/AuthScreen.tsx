@@ -10,7 +10,7 @@ import { signIn } from '../lib/firebase';
 // import { registerForPushNotificationsAsync } from "../lib/notification";
 import { UserContext } from '../contexts/userContext';
 
-export const AuthScreen: React.FC = () => {
+export const AuthScreen = () => {
   const { setUser } = useContext(UserContext);
 
   useEffect(() => {

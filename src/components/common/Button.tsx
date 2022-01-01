@@ -6,7 +6,7 @@ type Props = {
   text: string;
 };
 
-export const MEButton: React.FC<Props> = ({ onPress, text }: Props) => (
+export const MEButton = ({ onPress, text }: Props) => (
   <TouchableOpacity style={styles.container} onPress={onPress}>
     <Text style={styles.text}>{text}</Text>
   </TouchableOpacity>
