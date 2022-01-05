@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { ProductsContext } from '../../contexts/productsContext';
 /* code */
 import {
   fruitAndVegetable,
@@ -23,9 +22,8 @@ import { ProductList } from '../../components/ProductList';
 import commonStyles from '../../styles/CommonStyles';
 /* types */
 import { RootStackParamList } from '../../types/navigation';
-import { ProductType } from '../../types/product';
 /* lib */
-import { getProducts } from '../../lib/firebase';
+import { useGetProducts } from '../../lib/useGetProducts';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductList'>;
@@ -35,48 +33,8 @@ type Props = {
  * 商品一覧画面
  */
 export const ProductListScreen = ({ navigation }: Props) => {
-  // Firestoreから取得した全ての商品リスト
-  const { products, setProducts } = useContext(ProductsContext);
-  // 一覧画面に表示する用の商品リスト（選択したカテゴリーごとに切り替える）
-  const [selectProducts, setSelectProducts] = useState<ProductType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const getFirebaseItems = async () => {
-    setIsLoading(true);
-
-    const getProds = await getProducts();
-    setProducts(getProds);
-    setSelectProducts(getProds);
-
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    if (products.length === 0) {
-      // 初回ロード
-      getFirebaseItems();
-    } else {
-      // 商品追加時は全選択状態とする
-      setSelectProducts(products);
-    }
-  }, [products]);
-
-  /**
-   * 全ての商品を表示する
-   */
-  const selectAllProducts = () => {
-    setSelectProducts(products);
-  };
-
-  /**
-   * 指定のカテゴリーグループの商品を表示する
-   */
-  const filterProducts = (filterTarget: string[]) => {
-    const filterProd = products.filter((prod) =>
-      filterTarget.includes(prod.category),
-    );
-    setSelectProducts(filterProd);
-  };
+  const { isLoading, viewProducts, selectAllProducts, filterProducts } =
+    useGetProducts();
 
   const filterGroup = [
     { name: '野菜/果物', category: fruitAndVegetable },
@@ -112,7 +70,7 @@ export const ProductListScreen = ({ navigation }: Props) => {
           </TouchableOpacity>
         ))}
       </View>
-      <ProductList products={selectProducts} navigation={navigation} />
+      <ProductList products={viewProducts!} navigation={navigation} />
       <Loading visible={isLoading} />
     </SafeAreaView>
   );

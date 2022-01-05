@@ -11,10 +11,9 @@ import RNPickerSelect from 'react-native-picker-select';
 /* component */
 import { okAlert } from './common/CommonAlert';
 /* context */
-import { ProductsContext } from '../contexts/productsContext';
 import { ShoppingContext } from '../contexts/shoppingContext';
 /* lib */
-import { updateProductByShopping, getProducts } from '../lib/firebase';
+import { updateProductByShopping } from '../lib/firebase';
 /* types */
 import { ShopTarget } from '../types/shopTarget';
 
@@ -35,7 +34,6 @@ const numberList = [
  * 買い物リスト表示用のコンポーネント
  */
 export const ShoppingList = () => {
-  const { setProducts } = useContext(ProductsContext);
   // 買い物リスト選択で選択された買い物リスト
   const { shoppingList, setShoppingList } = useContext(ShoppingContext);
   // 更新用にオブジェクト化した買い物リスト
@@ -134,7 +132,6 @@ export const ShoppingList = () => {
     await Promise.all(
       buyTarget.map((target) => updateProductByShopping(target)),
     );
-    setProducts(await getProducts());
     // 選択したリストを一覧から除去する
     const remainTargetName = shopTarget
       .filter((target) => !target.isSelected)

@@ -14,36 +14,16 @@ import {
   updateDoc,
   serverTimestamp,
   runTransaction,
+  onSnapshot,
 } from 'firebase/firestore';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import Moment from 'moment';
-import { firebaseConfig } from './firebaseConfig';
+import { db } from './firebaseConfig';
 
 /* types */
 import { ProductType, ProductForm } from '../types/product';
 import { ShopTarget } from '../types/shopTarget';
 import { UserType, initialUser } from '../types/user';
-
-const firebaseApp = !getApps().length
-  ? initializeApp(firebaseConfig)
-  : getApp();
-const db = getFirestore(firebaseApp);
-
-/** Productコレクションから全データを取得する */
-export const getProducts = async (): Promise<ProductType[]> => {
-  try {
-    const q = query(collection(db, 'product'), orderBy('createdAt', 'desc'));
-    const querySnapshot = await getDocs(q);
-    const products = querySnapshot.docs.map(
-      (d) => ({ ...d.data(), id: d.id } as ProductType),
-    );
-    return products;
-  } catch (err) {
-    // TODO sentryなどに送信 ※errorBoundaryの仕組み構築
-    console.log(err);
-    return [];
-  }
-};
 
 /** Productコレクションにデータを追加する */
 export const addProduct = async (data: ProductForm) => {
@@ -72,12 +52,9 @@ export const addProduct = async (data: ProductForm) => {
         transaction.set(newProductRef, product);
       });
     });
-    product.id = newProductRef.id;
-    return product;
   } catch (error) {
     // TODO sentryなどに送信 ※errorBoundaryの仕組み構築
     console.log(error);
-    return null;
   }
 };
 

@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { ProductsContext } from '../../contexts/productsContext';
 /* components */
 import { Product } from '../../components/Product';
 import { IconButton } from '../../components/common/IconButton';
@@ -20,8 +19,6 @@ type Props = {
  * 商品追加画面
  */
 export const ProductAdd = ({ navigation }: Props) => {
-  const { products, setProducts } = useContext(ProductsContext);
-
   navigation.setOptions({
     title: '商品追加',
     headerLeft: () => (
@@ -30,8 +27,7 @@ export const ProductAdd = ({ navigation }: Props) => {
   });
 
   const register = async (data: ProductForm) => {
-    const resultProduct = await addProduct(data);
-    setProducts([resultProduct!, ...products]);
+    await addProduct(data);
     navigation.goBack();
   };
 

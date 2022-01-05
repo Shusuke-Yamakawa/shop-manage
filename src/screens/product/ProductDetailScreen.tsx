@@ -22,12 +22,10 @@ type Props = {
  * 商品更新画面
  */
 export const ProductDetail = ({ navigation, route }: Props) => {
-  const { products, setProducts } = useContext(ProductsContext);
   const { product } = route.params;
 
   const updateData = async (data: ProductForm) => {
     await updateProduct(data, product);
-    setProducts(await getProducts());
     navigation.goBack();
   };
 
@@ -44,8 +42,6 @@ export const ProductDetail = ({ navigation, route }: Props) => {
   const deleteData = async (docId: string) => {
     // Firestoreからデータ削除し、一覧画面に反映させて遷移する
     await deleteProduct(docId);
-    const newProducts = products.filter((prod) => prod.id !== product.id);
-    setProducts(newProducts);
     navigation.goBack();
   };
 
