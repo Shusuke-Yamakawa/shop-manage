@@ -37,17 +37,20 @@ export const useGetProducts = () => {
    */
   const selectAllProducts = useCallback(() => {
     setViewProducts(products);
-  }, []);
+  }, [products]);
 
   /**
    * 指定のカテゴリーグループの商品を表示する
    */
-  const filterProducts = useCallback((filterTarget: string[]) => {
-    const filterProd = products.filter((prod) =>
-      filterTarget.includes(prod.category),
-    );
-    setViewProducts(filterProd);
-  }, []);
+  const filterProducts = useCallback(
+    (filterTarget: string[]) => {
+      const filterProd = products.filter((prod) =>
+        filterTarget.includes(prod.category),
+      );
+      setViewProducts(filterProd);
+    },
+    [products],
+  );
 
   return {
     isLoading,
