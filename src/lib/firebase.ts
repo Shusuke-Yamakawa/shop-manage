@@ -1,6 +1,4 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
 import {
-  getFirestore,
   collection,
   query,
   orderBy,
@@ -14,7 +12,6 @@ import {
   updateDoc,
   serverTimestamp,
   runTransaction,
-  onSnapshot,
 } from 'firebase/firestore';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import Moment from 'moment';
